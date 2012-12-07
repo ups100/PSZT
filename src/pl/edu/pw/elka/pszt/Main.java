@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.tin;
+package pl.edu.pw.elka.pszt;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
@@ -11,9 +11,11 @@ public class Main {
 	 */
 	public static void main(String[] args)
 	{
-		new Main().testFunction();
 	}
 
+	/**
+	 * Nothing special, just for test linking
+	 */
 	public void testFunction()
 	{
 		Coordinate[] traingleCoords = new Coordinate[] {	new Coordinate(0,  0),
