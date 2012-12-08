@@ -1,7 +1,11 @@
 package pl.edu.pw.elka.pszt;
+import java.util.LinkedList;
+
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
+import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
 /**
@@ -17,36 +21,45 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception // Don't ask :P
 	{
-		int[][] aPoints = {};
 		int[][] trianglePoints = { {0, 6}, {3, 9}, {3, 6} };
 		int[][] bigSquarePoints = { {0, 6}, {3, 6}, {3, 3}, {0, 3} };
 		int[][] smallSquarePoints = { {1, 3}, {3, 3}, {3, 1}, {1, 1} };
-
+		
 		Segment triangleSegment = new Segment(trianglePoints);
 		Segment bigSquareSegment = new Segment(bigSquarePoints);
 		Segment smallSquareSegment = new Segment(smallSquarePoints);
 		
 		Model model = new Model();
-		System.out.println();
-		System.out.println(model.getTargetSegment());
-		System.out.println(model.getSegments());
+//		System.out.println();
+//		System.out.println(model.getTargetSegment());
+//		System.out.println(model.getSegments());
 
 		model.addSegment(triangleSegment);
-		System.out.println();
-		System.out.println(model.getTargetSegment());
-		System.out.println(model.getSegments());
+//		System.out.println();
+//		System.out.println(model.getTargetSegment());
+//		System.out.println(model.getSegments());
 
 		model.addSegment(bigSquareSegment);
-		System.out.println();
-		System.out.println(model.getTargetSegment());
-		System.out.println(model.getSegments());
+//		System.out.println();
+//		System.out.println(model.getTargetSegment());
+//		System.out.println(model.getSegments());
 		
 		model.addSegment(smallSquareSegment);
-		System.out.println();
-		System.out.println(model.getTargetSegment());
-		System.out.println(model.getSegments());
+//		System.out.println();
+//		System.out.println(model.getTargetSegment());
+//		System.out.println(model.getSegments());
 
-		System.out.println(model.getSegmentById(1).getVertexById(29));
+		//Population p = new Population(model.getSegments(), model.getTargetSegment());
+		//System.out.println(p);
+		
+
+//		double modelArea = model.getTargetSegment().getPolygon().getArea();
+//		double segmentArea = smallSquareSegment.getPolygon().getArea();
+		
+//		System.out.println(smallSquareSegment);
+//		System.out.println(smallSquareSegment.getAlignedClone());
+		
+//		p.copulateEntities();
 	}
 
 	/**

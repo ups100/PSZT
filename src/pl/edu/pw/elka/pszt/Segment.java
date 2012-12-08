@@ -1,6 +1,8 @@
 package pl.edu.pw.elka.pszt;
 
 import java.util.ArrayList;
+import java.util.Random;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
@@ -71,7 +73,8 @@ public class Segment {
 		if (vertices.size() < 3)
 			throw new Exception("Not enough coordinates");
 
-		this.vertices = vertices;
+		for (Vertex vertex : vertices)
+			this.vertices.add(new Vertex(vertex.getCoordinate()));
 
 		this.createPolygon();
 	}
@@ -141,6 +144,95 @@ public class Segment {
 	}
 
 	/**
+	 * Move segment by given values
+	 * 
+	 * @param x Horizontal movement
+	 * @param y Vertical movement
+	 */
+	public void moveBy(int x, int y)
+	{
+		for (Vertex vertex : this.vertices)
+		{
+			vertex.setX(vertex.getX() + x);
+			vertex.setY(vertex.getY() + y);
+		}
+
+		this.createPolygon();
+	}
+
+	/**
+	 * Get minimum X coordinate
+	 * 
+	 * @return minimum X coordinate from segment
+	 */
+	public int getMinX()
+	{
+		int minX = 999999999;
+		
+		for (Vertex vertex : this.vertices)
+			if (minX > vertex.getX())
+				minX = vertex.getX();
+
+		return minX;
+	}
+	
+	/**
+	 * Get minimum Y coordinate
+	 * 
+	 * @return minimum Y coordinate from segment
+	 */
+	public int getMinY()
+	{
+		int minY = 999999999;
+		
+		for (Vertex vertex : this.vertices)
+			if (minY > vertex.getY())
+				minY = vertex.getY();
+	
+		return minY;
+	}
+
+	/**
+	 * Align vertices to top left corner by removing minimum of X and Y coordinate
+	 * 
+	 * @return Aligned clone of segment
+	 */
+	public Segment getAlignedClone()
+	{
+		Segment clone = (Segment) this.clone();
+
+		int minX = this.getMinX();
+		int minY = this.getMinY();
+
+		clone.moveBy(-minX, -minY);
+
+		return clone;
+	}
+
+	/**
+	 * Clone this segment, by making union with itself
+	 * Copy id from old one to new one
+	 * 
+	 * @return Cloned segment with same id
+	 */
+	public Segment clone()
+	{
+		try
+		{
+			Segment segment = new Segment(this.getVertices());
+			segment.setId(this.getId());
+
+			return segment;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
 	 * Get vertex instance by given id from vertices list
 	 * 
 	 * @param id Vertex id
@@ -154,6 +246,17 @@ public class Segment {
 				return v;
 
 		throw new Exception("No vertex found in segmnet");
+	}
+
+	/**
+	 * Get random vertex from segment
+	 * 
+	 * @return Randomly chosen vertex
+	 */
+	public Vertex getRandomVertex()
+	{
+		// TODO maybe put 'except' those numbers or sth like that, depends of algorithm
+		return this.vertices.get(new Random().nextInt(this.vertices.size()));
 	}
 
 	/**
@@ -183,6 +286,16 @@ public class Segment {
 	 */
 	public int getId() {
 		return this.id;
+	}
+
+	/**
+	 * Set id
+	 * 
+	 * @param id New Id
+	 */
+	private void setId(int id)
+	{
+		this.id = id;
 	}
 
 	/**
