@@ -37,7 +37,7 @@ public class Vertex {
 	 */
 	public Vertex(final Coordinate coordinate)
 	{
-		this.coordinate = coordinate;
+		this.coordinate = new Coordinate(coordinate);
 	}
 
 	/**

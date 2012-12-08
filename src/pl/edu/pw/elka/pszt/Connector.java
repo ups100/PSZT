@@ -7,28 +7,88 @@ package pl.edu.pw.elka.pszt;
  */
 public class Connector {
 
-	/** Vertex of big one connected to */
-	private int bigOneVertexId;
+	/** Target Segment reference */
+	private Segment targetSegment;
 
-	/** Segment id connected to big one by vertices */
-	private int segmentId;
+	/** Segment connected to target segment by vertices */
+	private Segment segment;
+
+	/** Vertex of target segment connected to */
+	private Vertex targetSegmentVertex;
 
 	/** Vertex of segment connected by */
-	private int segmentVertexId;
+	private Vertex segmentVertex;
 
 	/**
 	 * C-tor
 	 * 
-	 * @param bigOneVertex Vertex of big one segment to attach
-	 * @param segmentId Segment id which is being combined
-	 * @param segmentVertexId Vertex id of segment combining by
+	 * @param targetSegmentVertex Vertex of big one segment to attach
 	 */
-	public Connector(final int bigOneVertex, final int segmentId, final int segmentVertexId)
+	public Connector(final Segment segment, final Segment targetSegment)
 	{
-		this.bigOneVertexId = bigOneVertex;
-		this.segmentId = segmentId;
-		this.segmentVertexId = segmentVertexId;
+		this.segment = segment.clone();
+		this.targetSegment = targetSegment;
+
+		this.targetSegmentVertex = this.targetSegment.getRandomVertex();
+		this.segmentVertex = this.segment.getRandomVertex();
+
+		int width = this.targetSegmentVertex.getX() - this.segmentVertex.getX();
+		int height = this.targetSegmentVertex.getY() - this.segmentVertex.getY();
+
+		this.segment.moveBy(width, height);
 	}
 
-	
+	/**
+	 * @return Segment connected by
+	 */
+	public Segment getSegment() {
+		return this.segment;
+	}
+
+	/**
+	 * @return Target segment connected to
+	 */
+	public Segment getTargetSegment() {
+		return this.targetSegment;
+	}
+
+	/**
+	 * @return Target segment vertex connected to
+	 */
+	public Vertex getTargetSegmentVertex() {
+		return this.targetSegmentVertex;
+	}
+
+	/**
+	 * @param Target segment vertex connected to
+	 */
+	public void setTargetSegmentVertex(final Vertex targetSegmentVertex) {
+		this.targetSegmentVertex = targetSegmentVertex;
+	}
+
+	/**
+	 * @return the segmentVertex
+	 */
+	public Vertex getSegmentVertex() {
+		return this.segmentVertex;
+	}
+
+	/**
+	 * @param segmentVertex the segmentVertexId to set
+	 */
+	public void setSegmentVertexId(final Vertex segmentVertex) {
+		this.segmentVertex = segmentVertex;
+	}
+
+	/**
+	 * Get string representation
+	 * 
+	 * @return ID of segment and what to what is connected
+	 */
+	public String toString()
+	{
+		return this.segment.getId() + " linked to target vertex " + this.targetSegmentVertex.getId() + " by "
+																						+ this.segmentVertex.getId();
+	}
+
 }
