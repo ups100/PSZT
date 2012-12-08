@@ -7,7 +7,9 @@ import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 
 /**
- * Representation of one tangram segment polygon
+ * Representation of one tangram segment polygon with id identifying it
+ * 
+ * @author Kajo
  */
 public class Segment {
 
@@ -20,7 +22,7 @@ public class Segment {
 	/** Polygon created from coordinates */
 	private Polygon polygon;
 
-	/** ID */
+	/** Unique segment ID */
 	private int id = i++;
 
 	/**
@@ -28,9 +30,13 @@ public class Segment {
 	 * creates vertex representation from coordinate int pairs 
 	 * 
 	 * @param vertices array of array with pairs x and y as coordinate
+	 * @throws Exception if not enough coordinates
 	 */
-	public Segment(final int[][] coordinates)
+	public Segment(final int[][] coordinates) throws Exception
 	{
+		if (coordinates.length < 3)
+			throw new Exception("Not enough coordinates");
+
 		for (int[] coord : coordinates)
 			this.vertices.add(new Vertex(coord[0], coord[1]));
 
@@ -41,11 +47,31 @@ public class Segment {
 	 * C-tor
 	 * 
 	 * @param vertices array of coordinates
+	 * @throws Exception if not enough coordinates
 	 */
-	public Segment(final Coordinate[] vertices)
+	public Segment(final Coordinate[] vertices) throws Exception
 	{
+		if (vertices.length < 3)
+			throw new Exception("Not enough coordinates");
+		
 		for (Coordinate vertex : vertices)
 			this.vertices.add(new Vertex(vertex));
+
+		this.createPolygon();
+	}
+
+	/**
+	 * C-tor
+	 * 
+	 * @param vertices ArrayList of vertices
+	 * @throws Exception if not enough vertices
+	 */
+	public Segment(final ArrayList<Vertex> vertices) throws Exception
+	{
+		if (vertices.size() < 3)
+			throw new Exception("Not enough coordinates");
+
+		this.vertices = vertices;
 
 		this.createPolygon();
 	}
@@ -72,11 +98,98 @@ public class Segment {
 		this.polygon = geometryFactory.createPolygon(polygonRing, holes);
 	}
 
+	/**
+	 * Creates union of this segment and other segment
+	 * 
+	 * @param other Segment to union with
+	 * @return new segment instance made of given segments
+	 * @throws Exception
+	 */
+	public Segment makeUnionSegment(final Segment other) throws Exception
+	{
+		Segment sum = new Segment(this.vertices);
+		
+		sum.unionSegment(other);
+
+		return sum;
+	}
+
+	/**
+	 * Union segments, make proper list of vertices
+	 * and create polygon from new vertices
+	 * 
+	 * @param other Segment to union with
+	 */
+	private void unionSegment(final Segment other)
+	{
+		Polygon sum;
+
+		// If null make union with itself
+		if (other == null)
+			sum = this.polygon;
+		else
+			sum = (Polygon) this.polygon.union(other.getPolygon());
+
+		Coordinate[] coords = sum.getCoordinates();
+
+		this.vertices.clear();
+		// Vertices without closing one
+		for (int i = 0; i < coords.length - 1; ++i)
+			this.vertices.add(new Vertex(coords[i]));
+
+		this.createPolygon();
+	}
+
+	/**
+	 * Get vertex instance by given id from vertices list
+	 * 
+	 * @param id Vertex id
+	 * @return Vertex instance if found equal id
+	 * @throws Exception if no id found
+	 */
+	public Vertex getVertexById(final int id) throws Exception
+	{
+		for (Vertex v : this.vertices)
+			if (id == v.getId())
+				return v;
+
+		throw new Exception("No vertex found in segmnet");
+	}
+
+	/**
+	 * Get vertices list from segment
+	 * 
+	 * @return Vertices list (Without duplicated closing one vertex)
+	 */
+	public ArrayList<Vertex> getVertices()
+	{
+		return this.vertices;
+	}
+
+	/**
+	 * Get segment polygon
+	 * 
+	 * @return Segment polygon
+	 */
 	public Polygon getPolygon()
 	{
 		return this.polygon;
 	}
 
+	/**
+	 * Get id of segment
+	 * 
+	 * @return ID of segment
+	 */
+	public int getId() {
+		return this.id;
+	}
+
+	/**
+	 * Get segment information
+	 * 
+	 *  @return segment ID and polygon contained information about coordinates
+	 */
 	public String toString()
 	{
 		return this.id + " : " + this.polygon.toString();
