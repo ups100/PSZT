@@ -33,60 +33,12 @@ public class Main {
 		Segment smallSquareSegment = new Segment(smallSquarePoints);
 
 		MultiSegment multiSegment = new MultiSegment();
-//		System.out.println();
-//		System.out.println(model.getTargetSegment());
-//		System.out.println(model.getSegments());
-
 		multiSegment.addSegment(triangleSegment);
-//		System.out.println();
-//		System.out.println(model.getTargetSegment());
-//		System.out.println(model.getSegments());
-
 		multiSegment.addSegment(bigSquareSegment);
-//		System.out.println();
-//		System.out.println(model.getTargetSegment());
-//		System.out.println(model.getSegments());
-		
 		multiSegment.addSegment(smallSquareSegment);
-//		System.out.println();
-//		System.out.println(model.getTargetSegment());
-//		System.out.println(model.getSegments());
 
-//		System.out.println(multiSegment);
-//		System.out.println(multiSegment.getAlignedPolygon());
-
-////		Polygon[] p = {triangleSegment.getPolygon(), bigSquareSegment.getPolygon()};
-////		MultiPolygon m = new MultiPolygon(p, new GeometryFactory());
-////		
-//		int[][] a = { {1, 3}, {3, 3}, {3, 1}, {1, 1} };
-//		int[][] a = { {1, 6}, {3, 6}, {3, 1}, {1, 1} };
-//		int[][] b = { {0, 6}, {3, 9}, {3, 6}, {3, 3}, {0, 3} };
-//
-//		Segment aa = new Segment(a);
-//		Segment bb = new Segment(b);
-//		
-//		System.out.println(aa.getPolygon() + " " + aa.getPolygon().getArea());
-//		System.out.println(bb.getPolygon() + " " + bb.getPolygon().getArea());
-//		MultiSegment ma = new MultiSegment();
-//		System.out.println(ma + " " + ma.getArea());
-//		ma.addSegment(aa);
-//		System.out.println(ma + " " + ma.getArea());
-//		ma.addSegment(bb);
-//		System.out.println(ma + " " + ma.getArea());
-////		System.out.println(bb.getPolygon().intersects(aa.getPolygon()));
-////		System.out.println(m);
-////		System.out.println(m.union(aa.getPolygon()).isValid());
-////		System.out.println(m.intersection(aa.getPolygon()));
-
-		Population p = new Population(multiSegment.getSegments(), multiSegment);
-//		System.out.println(p);
-		
-
-//		double modelArea = model.getTargetSegment().getPolygon().getArea();
-//		double segmentArea = smallSquareSegment.getPolygon().getArea();
-		
-//		System.out.println(smallSquareSegment);
-//		System.out.println(smallSquareSegment.getAlignedClone());
+		Population p = new Population(multiSegment);
+		System.out.println(p);
 		
 //		p.copulateEntities();
 	}
