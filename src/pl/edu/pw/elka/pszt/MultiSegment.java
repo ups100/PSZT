@@ -142,16 +142,14 @@ public class MultiSegment {
 	 * Calculate intersection area of this and given one
 	 * 
 	 * @param other Multi segment to check with
-	 * @return intersection area
+//	 * @return intersection area
+	 * @return array of sum of intersection source with target, source overlapping area, target covering area
 	 */
-	public double calculateIntersectionArea(MultiSegment other)
+	public double[] calculateIntersectionArea(MultiSegment other)
 	{
 
 		MultiSegment target = this.getAlignedMultiSegment();
 		MultiSegment source = other.getAlignedMultiSegment();
-
-		System.out.println(target);
-		System.out.println(source);
 
 		ArrayList<Segment> targetSegments = target.getSegments();
 		ArrayList<Segment> sourceSegments = source.getSegments();
@@ -165,10 +163,12 @@ public class MultiSegment {
 				sumOfIntersection += g.getArea();
 			}
 
-		System.out.println(sumOfIntersection);
-		System.out.println(source.getOverlapArea());
-		System.out.println(target.getCoveredArea());
-		return (sumOfIntersection - source.getOverlapArea()) / target.getCoveredArea();
+////		If wanted to show what with what is intersecting
+//		System.out.println(target);
+//		System.out.println(source);
+
+//		return (sumOfIntersection - source.getOverlapArea()) / target.getCoveredArea();
+		return new double[] {sumOfIntersection, source.getOverlapArea(), target.getCoveredArea()};
 	}
 
 	/**

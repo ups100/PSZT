@@ -10,38 +10,50 @@ import java.util.ArrayList;
 public class Population {
 
 	/** Amount of first population at least 2! */
-	public static final int FIRST_AMOUNT = 2;
+	public static final int FIRST_AMOUNT = 10;
 
 	/** List of entities */
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
 
 	/** Target segment instance */
-	private MultiSegment targetSegment;
-	
+	private final MultiSegment targetSegment;
 
-	public Population(ArrayList<Segment> segments, final MultiSegment targetSegment)
+	/** Number of generation */
+	private int generationNumber = 0;
+
+	/**
+	 * C-tor,
+	 * creates first population entities
+	 * 
+	 * @param targetSegment Multi segment with target and all segments building target inside
+	 */
+	public Population(final MultiSegment targetSegment)
 	{
 		this.targetSegment = targetSegment;
 
-		int tries = 0; // TODO remove, only to show that random is ready
-		//for (int i = 0; i < FIRST_AMOUNT; ++i) // Uncoment that
-		while(true) // remove that
-		{
-			Entity entity = new Entity();
+		for (int i = 0; i < FIRST_AMOUNT; ++i)
+			this.entities.add(createRandomEntity());
+	}
 
-			for (Segment segment : segments)
-			{
-				// TODO check random algorithm, except some already chosen vertices ?
-				Connector connector = new Connector(segment, targetSegment);
-	
-				entity.addConnector(connector);
-			}
-		
-			this.entities.add(entity);
-			System.out.println("try number: " + tries++ + " => " + entity.getAdaptationSize());
-			if (entity.getAdaptationSize() > 0.9) // remove that
-				break;
+	/**
+	 * Create random generated entity, usefull especially for first generation
+	 * 
+	 * @return Generated entity
+	 */
+	private Entity createRandomEntity()
+	{
+		ArrayList<Segment> segments = this.targetSegment.getSegments();
+		Entity entity = new Entity(this.generationNumber);
+
+		for (Segment segment : segments)
+		{
+			// TODO check random algorithm, except some already chosen vertices ?
+			Connector connector = new Connector(segment, this.targetSegment);
+
+			entity.addConnector(connector);
 		}
+
+		return entity;
 	}
 
 	/**
@@ -49,17 +61,18 @@ public class Population {
 	 */
 	public void nextGeneration()
 	{
+		this.generationNumber++;
 		copulateEntities();
 		// TODO mutate entities every time ?
 		// TODO sometime select entities
 	}
 
 	/**
-	 * Append new entites to population
+	 * Append new entities to population
 	 */
 	private void copulateEntities()
 	{
-		// TODO choose entites and copulate them
+		// TODO choose entities and copulate them
 	}
 
 	/**
@@ -68,6 +81,16 @@ public class Population {
 	private void selectEntites()
 	{
 		// TODO sometime remove weak entities
+	}
+
+	/**
+	 * Get number of actual generation
+	 * 
+	 * @return Generation number
+	 */
+	public int getGenerationNumber()
+	{
+		return this.generationNumber;
 	}
 
 	/**
