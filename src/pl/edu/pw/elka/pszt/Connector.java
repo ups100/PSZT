@@ -8,7 +8,7 @@ package pl.edu.pw.elka.pszt;
 public class Connector {
 
 	/** Target Segment reference */
-	private Segment targetSegment;
+	private MultiSegment targetSegment;
 
 	/** Segment connected to target segment by vertices */
 	private Segment segment;
@@ -24,59 +24,62 @@ public class Connector {
 	 * 
 	 * @param targetSegmentVertex Vertex of big one segment to attach
 	 */
-	public Connector(final Segment segment, final Segment targetSegment)
+	public Connector(final Segment segment, final MultiSegment targetSegment)
 	{
 		this.segment = segment.clone();
 		this.targetSegment = targetSegment;
 
 		this.targetSegmentVertex = this.targetSegment.getRandomVertex();
 		this.segmentVertex = this.segment.getRandomVertex();
-
-		int width = this.targetSegmentVertex.getX() - this.segmentVertex.getX();
-		int height = this.targetSegmentVertex.getY() - this.segmentVertex.getY();
-
-		this.segment.moveBy(width, height);
+	
+		this.segment.moveToVertexByVertex(this.targetSegmentVertex, this.segmentVertex);
 	}
 
 	/**
 	 * @return Segment connected by
 	 */
-	public Segment getSegment() {
+	public Segment getSegment()
+	{
 		return this.segment;
 	}
 
 	/**
 	 * @return Target segment connected to
 	 */
-	public Segment getTargetSegment() {
+	public MultiSegment getTargetSegment()
+	{
 		return this.targetSegment;
 	}
 
 	/**
 	 * @return Target segment vertex connected to
 	 */
-	public Vertex getTargetSegmentVertex() {
+	public Vertex getTargetSegmentVertex()
+	{
 		return this.targetSegmentVertex;
 	}
 
 	/**
 	 * @param Target segment vertex connected to
 	 */
-	public void setTargetSegmentVertex(final Vertex targetSegmentVertex) {
+	public void setTargetSegmentVertex(final Vertex targetSegmentVertex)
+	{
 		this.targetSegmentVertex = targetSegmentVertex;
 	}
 
 	/**
 	 * @return the segmentVertex
 	 */
-	public Vertex getSegmentVertex() {
+	public Vertex getSegmentVertex()
+	{
 		return this.segmentVertex;
 	}
 
 	/**
 	 * @param segmentVertex the segmentVertexId to set
 	 */
-	public void setSegmentVertexId(final Vertex segmentVertex) {
+	public void setSegmentVertex(final Vertex segmentVertex)
+	{
 		this.segmentVertex = segmentVertex;
 	}
 

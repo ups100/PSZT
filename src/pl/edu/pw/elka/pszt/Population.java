@@ -16,14 +16,16 @@ public class Population {
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
 
 	/** Target segment instance */
-	private Segment targetSegment;
+	private MultiSegment targetSegment;
 	
 
-	public Population(ArrayList<Segment> segments, final Segment targetSegment)
+	public Population(ArrayList<Segment> segments, final MultiSegment targetSegment)
 	{
 		this.targetSegment = targetSegment;
 
-		for (int i = 0; i < FIRST_AMOUNT; ++i)
+		int tries = 0; // TODO remove, only to show that random is ready
+		//for (int i = 0; i < FIRST_AMOUNT; ++i) // Uncoment that
+		while(true) // remove that
 		{
 			Entity entity = new Entity();
 
@@ -36,8 +38,9 @@ public class Population {
 			}
 		
 			this.entities.add(entity);
-			System.out.println(entity);
-			System.out.println(entity.getAdaptationSize());
+			System.out.println("try number: " + tries++ + " => " + entity.getAdaptationSize());
+			if (entity.getAdaptationSize() > 0.9) // remove that
+				break;
 		}
 	}
 

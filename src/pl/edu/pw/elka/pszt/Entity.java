@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pszt;
 
 import java.util.ArrayList;
 
+import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
 /**
@@ -33,8 +34,6 @@ public class Entity {
 
 	public double getAdaptationSize()
 	{
-		Segment target = this.connectors.get(0).getTargetSegment().getAlignedClone();
-
 		// Get mins
 		int minX = this.connectors.get(0).getSegment().getMinX();
 		int minY = this.connectors.get(0).getSegment().getMinY();
@@ -50,25 +49,13 @@ public class Entity {
 				minY = minYt;
 		}
 
-		double sum = 0;
+		MultiSegment target = this.connectors.get(0).getTargetSegment();
+		MultiSegment mp = new MultiSegment();
+
 		for (Connector connector : this.connectors)
-		{
-			Segment s = connector.getSegment().clone();
-			s.moveBy(-minX, -minY);
-			System.out.println(minX + " + " + minY);
+			mp.addSegment(connector.getSegment().clone());
 
-			Polygon p = null;
-			try
-			{
-				p = (Polygon) target.getPolygon().intersection(s.getPolygon());
-			}
-			catch (Exception e) {}
-
-			if (p != null)
-				sum += p.getArea();
-		}
-		
-		return sum / target.getPolygon().getArea();
+		return target.calculateIntersectionArea(mp);
 	}
 
 	public String toString()

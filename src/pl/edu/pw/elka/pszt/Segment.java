@@ -102,54 +102,12 @@ public class Segment {
 	}
 
 	/**
-	 * Creates union of this segment and other segment
-	 * 
-	 * @param other Segment to union with
-	 * @return new segment instance made of given segments
-	 * @throws Exception
-	 */
-	public Segment makeUnionSegment(final Segment other) throws Exception
-	{
-		Segment sum = new Segment(this.vertices);
-		
-		sum.unionSegment(other);
-
-		return sum;
-	}
-
-	/**
-	 * Union segments, make proper list of vertices
-	 * and create polygon from new vertices
-	 * 
-	 * @param other Segment to union with
-	 */
-	private void unionSegment(final Segment other)
-	{
-		Polygon sum;
-
-		// If null make union with itself
-		if (other == null)
-			sum = this.polygon;
-		else
-			sum = (Polygon) this.polygon.union(other.getPolygon());
-
-		Coordinate[] coords = sum.getCoordinates();
-
-		this.vertices.clear();
-		// Vertices without closing one
-		for (int i = 0; i < coords.length - 1; ++i)
-			this.vertices.add(new Vertex(coords[i]));
-
-		this.createPolygon();
-	}
-
-	/**
 	 * Move segment by given values
 	 * 
 	 * @param x Horizontal movement
 	 * @param y Vertical movement
 	 */
-	public void moveBy(int x, int y)
+	public Segment moveBy(int x, int y)
 	{
 		for (Vertex vertex : this.vertices)
 		{
@@ -158,6 +116,19 @@ public class Segment {
 		}
 
 		this.createPolygon();
+
+		return this;
+	}
+
+	/**
+	 * Move segment by attached by vertex to from vertex
+	 * 
+	 * @param to Vertex to reach
+	 * @param by Vertex reaching
+	 */
+	public void moveToVertexByVertex(final Vertex to, final Vertex by)
+	{
+		this.moveBy(to.getX() - by.getX(), to.getY() - by.getY());
 	}
 
 	/**
