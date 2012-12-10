@@ -10,15 +10,26 @@ public class Connector {
 	/** Target Segment reference */
 	private MultiSegment targetSegment;
 
-	/** Segment connected to target segment by vertices */
+	/** Beggining of binomial theorem (fuck yeah!) */
+	
+	/** Vertex of target segment connected to
+	 * 	Uno!
+	 *  */
+	private Vertex targetSegmentVertex;
+	
+	/** Vertex of segment connected by 
+	 * 	Dos!
+	 * */
+	private Vertex segmentVertex;
+	
+	/** Segment connected to target segment by vertices 
+	 *  Tres!
+	 * */
 	private Segment segment;
 
-	/** Vertex of target segment connected to */
-	private Vertex targetSegmentVertex;
-
-	/** Vertex of segment connected by */
-	private Vertex segmentVertex;
-
+	/** End of binomial theorem (fuck yeah again!) */
+	
+	
 	/**
 	 * C-tor
 	 * 

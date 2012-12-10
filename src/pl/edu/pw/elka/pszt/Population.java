@@ -1,6 +1,9 @@
 package pl.edu.pw.elka.pszt;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+
 
 /**
  * Represents population -> some entities
@@ -11,10 +14,13 @@ public class Population {
 
 	/** Amount of first population at least 2! */
 	public static final int FIRST_AMOUNT = 10;
-
+	public static final int CHILDREN = 15;
 	/** List of entities */
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
-
+	
+	/** To know, how many loops we need to do or sth */
+	private int numberOfEntities;
+	
 	/** Target segment instance */
 	private final MultiSegment targetSegment;
 
@@ -33,10 +39,12 @@ public class Population {
 
 		for (int i = 0; i < FIRST_AMOUNT; ++i)
 			this.entities.add(createRandomEntity());
+		
+		this.numberOfEntities = this.entities.size();
 	}
 
 	/**
-	 * Create random generated entity, usefull especially for first generation
+	 * Create random generated entity, useful especially for first generation
 	 * 
 	 * @return Generated entity
 	 */
@@ -62,17 +70,41 @@ public class Population {
 	public void nextGeneration()
 	{
 		this.generationNumber++;
-		copulateEntities();
+		Random generator = new Random();
+		int theChosenOnes = generator.nextInt(numberOfEntities) +1;
+		ArrayList<Entity> evolvingEntities = this.getEntities(theChosenOnes);
+		copulateEntities(evolvingEntities);
 		// TODO mutate entities every time ?
 		// TODO sometime select entities
 	}
 
 	/**
 	 * Append new entities to population
+	 * There is a need to change from public to private
+	 * (I guess so)
 	 */
-	private void copulateEntities()
+	public void copulateEntities(ArrayList<Entity> evolvingEntities)
 	{
+		
 		// TODO choose entities and copulate them
+	}
+	
+	/** Get exact amount of entities that will evolve */
+	private ArrayList<Entity> getEntities(int theChosenOnes) 
+	{
+		Random generator = new Random();
+		ArrayList<Entity> list = new ArrayList<Entity>();
+		int i = 0;
+		while(i != theChosenOnes)
+		{
+			int tmp = generator.nextInt(numberOfEntities);
+			if(!list.contains(this.entities.get(tmp)))
+			{
+				list.add(this.entities.get(tmp));
+				i++;
+			}
+		}		
+		return list;
 	}
 
 	/**
