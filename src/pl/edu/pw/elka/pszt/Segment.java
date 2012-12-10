@@ -74,7 +74,7 @@ public class Segment {
 			throw new Exception("Not enough coordinates");
 
 		for (Vertex vertex : vertices)
-			this.vertices.add(new Vertex(vertex.getCoordinate()));
+			this.vertices.add(new Vertex(vertex.getCoordinate(), vertex.getId()));
 
 		this.createPolygon();
 	}
