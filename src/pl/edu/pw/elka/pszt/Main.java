@@ -40,7 +40,7 @@ public class Main {
 		Population p = new Population(multiSegment);
 		System.out.println(p);
 		
-//		p.copulateEntities();
+	//	p.copulateEntities();
 	}
 
 	/**
