@@ -204,7 +204,7 @@ public class Entity {
 		str.append("Adaptation = " + (int) (this.getAdaptationSize() * 100) + "%,\t");
 
 		for (Connector connector : this.connectors)
-			str.append(connector.getSegment() + ", ");
+			str.append(connector + ";\t");
 
 		str.append(" Born in " + this.bornGeneration + " g.");
 

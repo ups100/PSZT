@@ -22,17 +22,33 @@ public class Connector {
 	/**
 	 * C-tor
 	 * 
-	 * @param targetSegmentVertex Vertex of big one segment to attach
+	 * @param segment Segment connecting to target by
+	 * @param targetSegment Target tangram segment as reference
+	 * @param targetVertex Vertex of segment which connects by to target
+	 * @param segmentVertex  Vertex of targetSegment to connect segment to
 	 */
-	public Connector(final Segment segment, final MultiSegment targetSegment)
+	public Connector(final Segment segment, final MultiSegment targetSegment, final Vertex targetVertex,
+																							final Vertex segmentVertex)
 	{
 		this.segment = segment.clone();
 		this.targetSegment = targetSegment;
 
-		this.targetSegmentVertex = this.targetSegment.getRandomVertex();
-		this.segmentVertex = this.segment.getRandomVertex();
+		this.targetSegmentVertex = targetVertex;
+		this.segmentVertex = segmentVertex;
 	
 		this.segment.moveToVertexByVertex(this.targetSegmentVertex, this.segmentVertex);
+	}
+
+	/**
+	 * C-tor
+	 * random connection vertices and invoke other c-tor
+	 * 
+	 * @param segment Segment connecting to target by
+	 * @param targetSegment Target tangram segment as reference
+	 */
+	public Connector(final Segment segment, final MultiSegment targetSegment)
+	{
+		this(segment, targetSegment, segment.getRandomVertex(), targetSegment.getRandomVertex());
 	}
 
 	/**
@@ -90,8 +106,8 @@ public class Connector {
 	 */
 	public String toString()
 	{
-		return this.segment.getId() + " linked to target vertex " + this.targetSegmentVertex.getId() + " by "
-																						+ this.segmentVertex.getId();
+		return this.segment + "\tlinked to target vertex " + this.targetSegmentVertex + " by "
+																						+ this.segmentVertex;
 	}
 
 }

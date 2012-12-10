@@ -41,6 +41,18 @@ public class Vertex {
 	}
 
 	/**
+	 * C-tor
+	 * 
+	 * @param coordinate Specified coordinate
+	 * @param id Vertex id
+	 */
+	public Vertex(final Coordinate coordinate, final int id)
+	{
+		this.coordinate = new Coordinate(coordinate);
+		this.id = id;
+	}
+
+	/**
 	 * Set x coordinate
 	 * 
 	 * @param x X coordinate
