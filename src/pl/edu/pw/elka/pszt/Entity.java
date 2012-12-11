@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pszt;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Represents entity made of connectors and segments as well
@@ -26,7 +27,8 @@ public class Entity {
 
 	/** Target area */
 	private double targetArea = -9999;
-
+	
+	private int numberOfSegments;
 	/**
 	 * C-tor
 	 * set generation number
@@ -36,8 +38,19 @@ public class Entity {
 	public Entity(final int generation)
 	{
 		this.bornGeneration = generation;
+		
 	}
 
+	public Entity(final Entity entity)
+	{
+		this.bornGeneration = entity.bornGeneration;
+		this.overlapArea = entity.overlapArea;
+		this.coveredArea = entity.coveredArea;
+		this.targetArea = entity.targetArea;
+		this.connectors = new ArrayList<Connector>(entity.connectors);
+		this.numberOfSegments = connectors.size();
+		System.out.println("NUMBER OF SEGMENTS TO "+ numberOfSegments);
+	}
 	/**
 	 * Add connector between segment, vertex from segment and vertex from target segment to the entity
 	 * 
@@ -46,22 +59,77 @@ public class Entity {
 	public void addConnector(final Connector connector)
 	{
 		this.connectors.add(connector);
-
+		this.numberOfSegments++;
 		// Some optimization, that entity has changed
 		this.coveredArea = -1;
 	}
-
+	
+	/**
+	 * 
+	 * @param other "Father" in a relationship (this is mother!)
+	 * @return baby
+	 * @brief separator is a decision what is taken from mother
+	 */
 	public Entity copulateWith(final Entity other)
 	{
-		// TODO make them love each other
-		return null;
+		Entity baby = new Entity(this.bornGeneration);
+		Random generator = new Random();		
+		int separator = generator.nextInt(numberOfSegments-1) +1;
+		int i = 0;
+		for (;i<separator; ++i)
+		{
+			baby.addConnector(new Connector(this.connectors.get(i)));
+		}
+		for(;i<numberOfSegments;++i)
+		{
+			baby.addConnector(new Connector(other.connectors.get(i)));
+		}	
+		return baby;
 	}
 
 	public void mutateEntity()
 	{
 		// TODO mutation algorithm 
 		// Access to necessary segments inside conectors
+		/**
+		 * Decision: Just one connection is mutated
+		 * It can be simple changed to be allowed for more than one
+		 * but this means loops, draw without returning and other weird stuff
+		 */
+		Random generator = new Random();
 
+		int connectorToChange = generator.nextInt(numberOfSegments);
+		Connector mutant = connectors.get(connectorToChange);
+		int actualVertex = mutant.getSegmentVertex().getId();
+		ArrayList<Vertex>  baseForSearching = mutant.getSegment().getVertices();
+		System.out.println("VERTICES TO ");
+		for (Vertex v : baseForSearching)
+		{
+			System.out.println(v);
+		}
+		int newVertex = actualVertex;
+		while (newVertex == actualVertex)
+		{
+			try
+			{
+				newVertex = baseForSearching.get(generator.nextInt(baseForSearching.size())).getId();			
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		System.out.println("NOWY WERTEX TO " + newVertex);
+		System.out.println("STARY WERTEX TO " + actualVertex);
+		System.out.println("");
+		mutant.getSegment().moveToVertexByVertex(mutant.getTargetSegmentVertex(),mutant.getSegment().getVertexById(newVertex));
+		
+		
+		
+		/**
+		 * Random vertex from the segment, will be changed
+		 */
+		
 		// Some optimization, that entity has changed
 		this.coveredArea = -1;
 	}
@@ -189,6 +257,7 @@ public class Entity {
 	{
 		return this.bornGeneration;
 	}
+
 
 	/**
 	 * Get information about entity

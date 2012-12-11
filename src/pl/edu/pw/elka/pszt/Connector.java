@@ -1,5 +1,7 @@
 package pl.edu.pw.elka.pszt;
 
+
+
 /**
  * Class representing connection between, vertices of tangram element and target big one element
  * 
@@ -50,6 +52,10 @@ public class Connector {
 		this.segment.moveToVertexByVertex(this.targetSegmentVertex, this.segmentVertex);
 	}
 
+	public Connector(final Connector connector)
+	{
+		this(connector.getSegment().clone(),connector.targetSegment, connector.targetSegmentVertex, connector.segmentVertex);
+	}
 	/**
 	 * C-tor
 	 * random connection vertices and invoke other c-tor
@@ -59,7 +65,21 @@ public class Connector {
 	 */
 	public Connector(final Segment segment, final MultiSegment targetSegment)
 	{
+		
 		this(segment, targetSegment, segment.getRandomVertex(), targetSegment.getRandomVertex());
+		System.out.println("DRUKUJEMY CONNECTOR");
+		for (Vertex v : segment.getVertices())
+		{
+			System.out.println(v);
+		}
+		System.out.println("A WYLOSOWANY TO");
+		System.out.println(segment.getRandomVertex());
+	}
+	
+	public Connector getConnection()
+	{
+		Connector c = new Connector(this.segment,this.targetSegment, this.segmentVertex,this.targetSegmentVertex);
+		return c;
 	}
 
 	/**
@@ -94,7 +114,7 @@ public class Connector {
 		this.targetSegmentVertex = targetSegmentVertex;
 	}
 
-	/**
+	/**		//this.segment.moveToVertexByVertex(this.targetSegmentVertex, this.segmentVertex);
 	 * @return the segmentVertex
 	 */
 	public Vertex getSegmentVertex()
@@ -109,7 +129,7 @@ public class Connector {
 	{
 		this.segmentVertex = segmentVertex;
 	}
-
+	
 	/**
 	 * Get string representation
 	 * 

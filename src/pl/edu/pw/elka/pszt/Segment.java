@@ -210,13 +210,13 @@ public class Segment {
 	 * @return Vertex instance if found equal id
 	 * @throws Exception if no id found
 	 */
-	public Vertex getVertexById(final int id) throws Exception
+	public Vertex getVertexById(final int id)
 	{
 		for (Vertex v : this.vertices)
 			if (id == v.getId())
 				return v;
 
-		throw new Exception("No vertex found in segmnet");
+		return null;
 	}
 
 	/**
@@ -243,7 +243,7 @@ public class Segment {
 	/**
 	 * Get segment polygon
 	 * 
-	 * @return Segment polygon
+	 * @return Segment polygonto
 	 */
 	public Polygon getPolygon()
 	{

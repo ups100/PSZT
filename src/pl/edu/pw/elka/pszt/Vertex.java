@@ -10,7 +10,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 public class Vertex {
 
 	/** ID iterator */
-	private static int i = 0;
+	private static int i = 1;
 
 	/** Coordinates */
 	private Coordinate coordinate;
@@ -120,7 +120,7 @@ public class Vertex {
 	{
 		return this.coordinate;
 	}
-
+	
 	/**
 	 * Get information about vertex
 	 * 
