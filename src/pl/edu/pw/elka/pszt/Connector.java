@@ -40,8 +40,8 @@ public class Connector {
 	 * @param targetVertex Vertex of segment which connects by to target
 	 * @param segmentVertex  Vertex of targetSegment to connect segment to
 	 */
-	public Connector(final Segment segment, final MultiSegment targetSegment, final Vertex targetVertex,
-																							final Vertex segmentVertex)
+	public Connector(final Segment segment, final MultiSegment targetSegment, final Vertex segmentVertex,
+																							final Vertex targetVertex)
 	{
 		this.segment = segment.clone();
 		this.targetSegment = targetSegment;
@@ -54,7 +54,7 @@ public class Connector {
 
 	public Connector(final Connector connector)
 	{
-		this(connector.getSegment().clone(),connector.targetSegment, connector.targetSegmentVertex, connector.segmentVertex);
+		this(connector.getSegment().clone(),connector.targetSegment, connector.segmentVertex, connector.targetSegmentVertex);
 	}
 	/**
 	 * C-tor
