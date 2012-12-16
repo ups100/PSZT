@@ -136,4 +136,13 @@ public class Connector {
 																						+ this.segmentVertex;
 	}
 
+	public boolean compare(Connector connector) {
+		if(this.segment.getId() != connector.segment.getId())
+			return false;
+		if(this.targetSegmentVertex.getId() != connector.targetSegmentVertex.getId())
+			return false;
+		if(this.segmentVertex.getId() != connector.segmentVertex.getId());
+		return true;
+	}
+
 }

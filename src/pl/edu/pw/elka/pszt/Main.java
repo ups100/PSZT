@@ -39,13 +39,12 @@ public class Main {
 		System.out.println("TE STARE TO");
 		System.out.println(p);
 		
-		/** To be honest it does not work */
+		
 		
 		while(true)
 		{
 			if(p.nextGeneration()) break;
 		}
-		// p.copulateEntities();
 		System.out.println("Everything is done");
 	}
 

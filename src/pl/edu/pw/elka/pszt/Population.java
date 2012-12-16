@@ -55,7 +55,6 @@ public class Population {
 			// TODO check random algorithm, except some already chosen vertices
 			// 
 			Connector connector = new Connector(segment, this.targetSegment);
-
 			entity.addConnector(connector);
 		}
 		
@@ -82,18 +81,25 @@ public class Population {
 		 */
 		
 		this.mutateEvolvingPopulation(evolvingEntities);
-		System.out.println("TE NOWE TO");
-		for (Entity e : evolvingEntities)
-		{
-			System.out.println(e);
-		}
+		
+	
 		
 		this.entities = this.getTheBestOnes(evolvingEntities);
+		
+		/**
+		 * This update is unnecessary 
+		 * The number of Entities should be const
+		 */
+		this.numberOfEntities = this.entities.size();
+		
+		
 		System.out.println("PO " + this.generationNumber+" GENERACJI TO");
 		for (Entity e : this.entities)
 		{
 			System.out.println(e);
 		}
+		
+		
 		
 		for(Entity e : this.entities)
 		{
@@ -109,41 +115,45 @@ public class Population {
 
 	private ArrayList<Entity> getTheBestOnes(ArrayList<Entity> evolvingEntities) 
 	{
-		for (int i = 0; i<numberOfEntities;++i)
+		
+		this.entities = this.removeDouble(this.entities);
+		
+		for (int i = 0; i<this.entities.size();++i)
 		{
 			evolvingEntities.add(this.entities.get(i));
 		}
 		
+		
+		
 		/** 
-		 * Used for tests
-		 */
-		System.out.println("A NAJNOWSZE TO");
-		for (Entity e : evolvingEntities)
-		{
-			System.out.println(e);
-		}
+		 * Used for tests, both children and parents
+		 */		
+		
 		
 		ArrayList<Entity> newGeneration = new ArrayList<Entity>();
-		Vector<Integer> actuallyAdded = new Vector<>();
+		Vector<Integer> actuallyAdded = new Vector<Integer>();
 		double maxAdaptation = -2;
 		int maxIndex;
+		System.out.println("numberOfEntities " + numberOfEntities);
+		System.out.println("evolvingEntities.size() " + evolvingEntities.size());
 		for (int i = 0; i<numberOfEntities;++i)
-		{
+		{		
 			maxAdaptation = -2;
 			maxIndex = -1;
 			for(int j = 0;j< evolvingEntities.size();++j)
-			{
-				
+			{			
 				if (actuallyAdded.contains(j)) continue;
 				if(evolvingEntities.get(j).getAdaptationSize() > maxAdaptation)
-				{
+				{					
 					maxAdaptation = evolvingEntities.get(j).getAdaptationSize();
-					maxIndex = j;						
+					maxIndex = j;
 				}
+				
 			}
 			actuallyAdded.add(maxIndex);
 			newGeneration.add(evolvingEntities.get(maxIndex));
 		}
+		
 		return newGeneration;
 	}
 
@@ -187,7 +197,9 @@ public class Population {
 		/** 
 		 * Number is random now, but it can be easily changed 
 		 */
-		int theChosenOnes = generator.nextInt(this.numberOfEntities) + 1;
+		int theChosenOnes = 0;
+		while(theChosenOnes<4)
+		theChosenOnes = generator.nextInt(this.numberOfEntities-1) + 1;
 		Vector<Integer> previousNumbers = new Vector<>();
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		int i = 0;
@@ -213,13 +225,21 @@ public class Population {
 	}
 
 
-
-	/**
-	 * Select more adapted entites
-	 */
-	private void selectEntites() {
-		// TODO sometime remove weak entities
+	private ArrayList<Entity> removeDouble(ArrayList<Entity> list)
+	{
+		for (int i = 0; i<list.size()-1; ++i)
+		{
+			for (int j = i+1; j<list.size(); ++j)
+			{
+				if (list.get(i).compare(list.get(j)))
+				{
+					list.remove(j);
+				}
+			}
+		}
+		return list;
 	}
+	
 
 	/**
 	 * Get number of actual generation

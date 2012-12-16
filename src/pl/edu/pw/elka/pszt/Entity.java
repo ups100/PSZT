@@ -275,4 +275,13 @@ public class Entity {
 		return str.toString();
 	}
 
+	public boolean compare(Entity entity) {
+		for (int i = 0; i<connectors.size(); ++i)
+		{
+			if(!this.connectors.get(i).compare(entity.connectors.get(i)))
+				return false;
+		}
+		return true;
+	}
+
 }
