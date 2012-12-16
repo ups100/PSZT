@@ -67,13 +67,8 @@ public class Connector {
 	{
 		
 		this(segment, targetSegment, segment.getRandomVertex(), targetSegment.getRandomVertex());
-		System.out.println("DRUKUJEMY CONNECTOR");
-		for (Vertex v : segment.getVertices())
-		{
-			System.out.println(v);
-		}
-		System.out.println("A WYLOSOWANY TO");
-		System.out.println(segment.getRandomVertex());
+		
+		
 	}
 	
 	public Connector getConnection()

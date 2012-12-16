@@ -36,10 +36,17 @@ public class Main {
 		multiSegment.addSegment(smallSquareSegment);
 
 		Population p = new Population(multiSegment);
+		System.out.println("TE STARE TO");
 		System.out.println(p);
-		p.nextGeneration();
 		
+		/** To be honest it does not work */
+		
+		while(true)
+		{
+			if(p.nextGeneration()) break;
+		}
 		// p.copulateEntities();
+		System.out.println("Everything is done");
 	}
 
 	/**
