@@ -136,7 +136,6 @@ public class Connector {
 																						+ this.segmentVertex;
 	}
 
-<<<<<<< HEAD
 	public boolean compare(Connector connector) {
 		if(this.segment.getId() != connector.segment.getId())
 			return false;
@@ -146,6 +145,4 @@ public class Connector {
 		return true;
 	}
 
-=======
->>>>>>> c257d910922c3a729b61a0f3fa47ab3400876e1e
 }
