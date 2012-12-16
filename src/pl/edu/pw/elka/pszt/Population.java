@@ -53,7 +53,7 @@ public class Population {
 
 		for (Segment segment : segments) {
 			// TODO check random algorithm, except some already chosen vertices
-			// ?
+			// 
 			Connector connector = new Connector(segment, this.targetSegment);
 
 			entity.addConnector(connector);
@@ -65,7 +65,7 @@ public class Population {
 	/**
 	 * Make next generation by coitus, mutation and natural selection
 	 */
-	public void nextGeneration() {
+	public boolean nextGeneration() {
 		
 		this.generationNumber++;
 		ArrayList<Entity> evolvingEntities = this.getEntities();
@@ -82,11 +82,69 @@ public class Population {
 		 */
 		
 		this.mutateEvolvingPopulation(evolvingEntities);
-		//this.mutateEvolvingPopulation(this.entities);
-		//this.copulateEntities(evolvingEntities);
-		// TODO mutate entities every time ?
-		// TODO sometime select entities
+		System.out.println("TE NOWE TO");
+		for (Entity e : evolvingEntities)
+		{
+			System.out.println(e);
+		}
 		
+		this.entities = this.getTheBestOnes(evolvingEntities);
+		System.out.println("PO " + this.generationNumber+" GENERACJI TO");
+		for (Entity e : this.entities)
+		{
+			System.out.println(e);
+		}
+		
+		for(Entity e : this.entities)
+		{
+			if(e.getAdaptationSize() > 0.9) 
+			{
+				System.out.println("KONIEC, ZNALEŹLIŚMY");
+				return true;
+			}
+				
+		}
+		return false;	
+	}
+
+	private ArrayList<Entity> getTheBestOnes(ArrayList<Entity> evolvingEntities) 
+	{
+		for (int i = 0; i<numberOfEntities;++i)
+		{
+			evolvingEntities.add(this.entities.get(i));
+		}
+		
+		/** 
+		 * Used for tests
+		 */
+		System.out.println("A NAJNOWSZE TO");
+		for (Entity e : evolvingEntities)
+		{
+			System.out.println(e);
+		}
+		
+		ArrayList<Entity> newGeneration = new ArrayList<Entity>();
+		Vector<Integer> actuallyAdded = new Vector<>();
+		double maxAdaptation = -2;
+		int maxIndex;
+		for (int i = 0; i<numberOfEntities;++i)
+		{
+			maxAdaptation = -2;
+			maxIndex = -1;
+			for(int j = 0;j< evolvingEntities.size();++j)
+			{
+				
+				if (actuallyAdded.contains(j)) continue;
+				if(evolvingEntities.get(j).getAdaptationSize() > maxAdaptation)
+				{
+					maxAdaptation = evolvingEntities.get(j).getAdaptationSize();
+					maxIndex = j;						
+				}
+			}
+			actuallyAdded.add(maxIndex);
+			newGeneration.add(evolvingEntities.get(maxIndex));
+		}
+		return newGeneration;
 	}
 
 	private void mutateEvolvingPopulation(ArrayList<Entity> evolvingEntities) 
@@ -116,11 +174,6 @@ public class Population {
 				afterCopulationList.add(new Entity(evolvingEntities.get(i).copulateWith(evolvingEntities.get(j))));
 			}
 		}
-		System.out.println("PO KOPULACJI");
-		for (Entity e : afterCopulationList)
-		{
-			System.out.println(e);
-		}
 		return afterCopulationList;
 	}
 	
@@ -130,6 +183,10 @@ public class Population {
 	private ArrayList<Entity> getEntities() 
 	{
 		Random generator = new Random();
+		
+		/** 
+		 * Number is random now, but it can be easily changed 
+		 */
 		int theChosenOnes = generator.nextInt(this.numberOfEntities) + 1;
 		Vector<Integer> previousNumbers = new Vector<>();
 		ArrayList<Entity> list = new ArrayList<Entity>();
@@ -140,7 +197,12 @@ public class Population {
 			if(!previousNumbers.contains(tmp))
 			{			
 				previousNumbers.add(tmp);
-				list.add(new Entity(this.entities.get(tmp)));	
+				/**
+				 * Just getting reference to parents
+				 * instead of cloning them
+				 */
+				//list.add(new Entity(this.entities.get(tmp)));	
+				list.add(this.entities.get(tmp));
 				i++;
 			}
 					

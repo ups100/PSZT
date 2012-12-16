@@ -49,7 +49,6 @@ public class Entity {
 		this.targetArea = entity.targetArea;
 		this.connectors = new ArrayList<Connector>(entity.connectors);
 		this.numberOfSegments = connectors.size();
-		System.out.println("NUMBER OF SEGMENTS TO "+ numberOfSegments);
 	}
 	/**
 	 * Add connector between segment, vertex from segment and vertex from target segment to the entity
@@ -90,7 +89,7 @@ public class Entity {
 	public void mutateEntity()
 	{
 		// TODO mutation algorithm 
-		// Access to necessary segments inside conectors
+		// Access to necessary segments inside connectors
 		/**
 		 * Decision: Just one connection is mutated
 		 * It can be simple changed to be allowed for more than one
@@ -102,11 +101,7 @@ public class Entity {
 		Connector mutant = connectors.get(connectorToChange);
 		int actualVertex = mutant.getSegmentVertex().getId();
 		ArrayList<Vertex>  baseForSearching = mutant.getSegment().getVertices();
-		System.out.println("VERTICES TO ");
-		for (Vertex v : baseForSearching)
-		{
-			System.out.println(v);
-		}
+		
 		int newVertex = actualVertex;
 		while (newVertex == actualVertex)
 		{
@@ -119,9 +114,7 @@ public class Entity {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("NOWY WERTEX TO " + newVertex);
-		System.out.println("STARY WERTEX TO " + actualVertex);
-		System.out.println("");
+		
 		mutant.getSegment().moveToVertexByVertex(mutant.getTargetSegmentVertex(),mutant.getSegment().getVertexById(newVertex));
 		
 		
