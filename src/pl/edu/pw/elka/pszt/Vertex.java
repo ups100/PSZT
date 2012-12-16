@@ -131,9 +131,12 @@ public class Vertex {
 		return this.id + " : (" + (int) this.coordinate.x + ", " + (int) this.coordinate.y + ")";
 	}
 
+<<<<<<< HEAD
 	public boolean compare(Vertex vertex) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+=======
+>>>>>>> c257d910922c3a729b61a0f3fa47ab3400876e1e
 }

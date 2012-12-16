@@ -275,6 +275,7 @@ public class Entity {
 		return str.toString();
 	}
 
+<<<<<<< HEAD
 	public boolean compare(Entity entity) {
 		for (int i = 0; i<connectors.size(); ++i)
 		{
@@ -284,4 +285,6 @@ public class Entity {
 		return true;
 	}
 
+=======
+>>>>>>> c257d910922c3a729b61a0f3fa47ab3400876e1e
 }
