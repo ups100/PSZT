@@ -116,18 +116,12 @@ public class Entity implements Comparable<Entity> {
 		Segment segmentToMove = connectorToMutate.getSegment();
 
 		// Choose vertex to move segment by
-		ArrayList<Vertex> verticesToChange = segmentToMove.getVertices();
-		int segmentVertexId = generator.nextInt(verticesToChange.size());
-
-		Vertex segmentVertex = verticesToChange.get(segmentVertexId);
+		Vertex segmentVertex = segmentToMove.getRandomVertex();
 		// Set new segment vertex in connector
 		connectorToMutate.setSegmentVertex(segmentVertex);
 
 		// Choose vertex to move segment to
-		ArrayList<Vertex> verticesToMoveTo = connectorToMutate.getTargetSegment().getVertices();
-		int targetSegmentVertexId = generator.nextInt(verticesToMoveTo.size());
-
-		Vertex targetSegmentVertex = verticesToMoveTo.get(targetSegmentVertexId);
+		Vertex targetSegmentVertex = connectorToMutate.getTargetSegment().getRandomVertex();
 		// Set new target vertex in connector
 		connectorToMutate.setTargetSegmentVertex(targetSegmentVertex);
 
