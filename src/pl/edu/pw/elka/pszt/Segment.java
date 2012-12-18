@@ -34,12 +34,12 @@ public class Segment {
 	 * @param vertices array of array with pairs x and y as coordinate
 	 * @throws Exception if not enough coordinates
 	 */
-	public Segment(final int[][] coordinates) throws Exception
+	public Segment(final double[][] coordinates) throws Exception
 	{
 		if (coordinates.length < 3)
 			throw new Exception("Not enough coordinates");
 
-		for (int[] coord : coordinates)
+		for (double[] coord : coordinates)
 			this.vertices.add(new Vertex(coord[0], coord[1]));
 
 		this.createPolygon();
@@ -107,7 +107,7 @@ public class Segment {
 	 * @param x Horizontal movement
 	 * @param y Vertical movement
 	 */
-	public Segment moveBy(int x, int y)
+	public Segment moveBy(double x, double y)
 	{
 		for (Vertex vertex : this.vertices)
 		{
@@ -136,9 +136,9 @@ public class Segment {
 	 * 
 	 * @return minimum X coordinate from segment
 	 */
-	public int getMinX()
+	public double getMinX()
 	{
-		int minX = 999999999;
+		double minX = 999999999;
 		
 		for (Vertex vertex : this.vertices)
 			if (minX > vertex.getX())
@@ -152,9 +152,9 @@ public class Segment {
 	 * 
 	 * @return minimum Y coordinate from segment
 	 */
-	public int getMinY()
+	public double getMinY()
 	{
-		int minY = 999999999;
+		double minY = 999999999;
 		
 		for (Vertex vertex : this.vertices)
 			if (minY > vertex.getY())
@@ -167,13 +167,14 @@ public class Segment {
 	 * Align vertices to top left corner by removing minimum of X and Y coordinate
 	 * 
 	 * @return Aligned clone of segment
+	 * @deprecated not used
 	 */
 	public Segment getAlignedClone()
 	{
-		Segment clone = (Segment) this.clone();
+		Segment clone = this.clone();
 
-		int minX = this.getMinX();
-		int minY = this.getMinY();
+		double minX = this.getMinX();
+		double minY = this.getMinY();
 
 		clone.moveBy(-minX, -minY);
 
@@ -186,6 +187,7 @@ public class Segment {
 	 * 
 	 * @return Cloned segment with same id
 	 */
+	@Override
 	public Segment clone()
 	{
 		try
@@ -197,6 +199,7 @@ public class Segment {
 		}
 		catch (Exception e)
 		{
+			System.err.println("Segment cloning exception.");
 			e.printStackTrace();
 		}
 
@@ -274,6 +277,7 @@ public class Segment {
 	 * 
 	 *  @return segment ID and polygon contained information about coordinates
 	 */
+	@Override
 	public String toString()
 	{
 		return this.id + " : " + this.polygon.toString();

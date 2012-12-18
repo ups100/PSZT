@@ -18,7 +18,7 @@ public class MultiSegment {
 	/** Union of the tangram segments = target segment */
 	private MultiPolygon polygon = null;
 
-	/** Area of polygon made of other poygons */
+	/** Area of polygon made of other polygons */
 	private double coveredArea = 0;
 
 	/** Area of polygon which overlaps on itself */
@@ -88,6 +88,7 @@ public class MultiSegment {
 	 * @param id Segment id
 	 * @return Segment instance if found equal id
 	 * @throws Exception if no id found
+	 * @deprecated not used
 	 */
 	public Segment getSegmentById(final int id) throws Exception
 	{
@@ -116,16 +117,16 @@ public class MultiSegment {
 	 */
 	public MultiSegment getAlignedMultiSegment()
 	{
-		int minX = this.segments.get(0).getMinX();
-		int minY = this.segments.get(0).getMinY();
+		double minX = this.segments.get(0).getMinX();
+		double minY = this.segments.get(0).getMinY();
 
-		for (int i = 0; i < this.segments.size(); ++i)
+		for (int i = 1; i < this.segments.size(); ++i)
 		{
-			int minXt = this.segments.get(i).getMinX();
+			double minXt = this.segments.get(i).getMinX();
 			if (minX > minXt)
 				minX = minXt;
 
-			int minYt = this.segments.get(i).getMinY();
+			double minYt = this.segments.get(i).getMinY();
 			if (minY > minYt)
 				minY = minYt;
 		}
@@ -145,9 +146,8 @@ public class MultiSegment {
 //	 * @return intersection area
 	 * @return array of sum of intersection source with target, source overlapping area, target covering area
 	 */
-	public double[] calculateIntersectionArea(MultiSegment other)
+	public double[] calculateIntersectionArea(final MultiSegment other)
 	{
-
 		MultiSegment target = this.getAlignedMultiSegment();
 		MultiSegment source = other.getAlignedMultiSegment();
 
@@ -163,11 +163,6 @@ public class MultiSegment {
 				sumOfIntersection += g.getArea();
 			}
 
-////		If wanted to show what with what is intersecting
-//		System.out.println(target);
-//		System.out.println(source);
-
-//		return (sumOfIntersection - source.getOverlapArea()) / target.getCoveredArea();
 		return new double[] {sumOfIntersection, source.getOverlapArea(), target.getCoveredArea()};
 	}
 
@@ -224,6 +219,7 @@ public class MultiSegment {
 	 * Get area which is sum of segments areas
 	 * 
 	 * @return Sum of segments areas
+	 * @deprecated not used
 	 */
 	public double getSumOfSegmentsArea()
 	{
@@ -235,6 +231,7 @@ public class MultiSegment {
 	 * 
 	 * @return Multi Polygon info
 	 */
+	@Override
 	public String toString()
 	{
 		if (this.polygon != null)

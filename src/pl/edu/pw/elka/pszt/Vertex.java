@@ -20,12 +20,12 @@ public class Vertex {
 
 	/**
 	 * C-tor,
-	 * given coordinates as Integer, but stored as double // TODO think about that, int will be better(easier)
+	 * given coordinates as doubles
 	 * 
 	 * @param x coordinate
 	 * @param y coordinate
 	 */
-	public Vertex(final int x, final int y)
+	public Vertex(final double x, final double y)
 	{
 		this.coordinate = new Coordinate(x, y);
 	}
@@ -53,11 +53,20 @@ public class Vertex {
 	}
 
 	/**
+	 * Get clone of the vertex
+	 */
+	@Override
+	public Vertex clone()
+	{
+		return new Vertex(this.coordinate, this.id);
+	}
+
+	/**
 	 * Set x coordinate
 	 * 
 	 * @param x X coordinate
 	 */
-	public void setX(final int x)
+	public void setX(final double x)
 	{
 		this.coordinate.x = x;
 	}
@@ -67,9 +76,9 @@ public class Vertex {
 	 * 
 	 * @return X coordinate
 	 */
-	public int getX()
+	public double getX()
 	{
-		return (int) this.coordinate.x;
+		return this.coordinate.x;
 	}
 
 	/**
@@ -77,7 +86,7 @@ public class Vertex {
 	 * 
 	 * @param y Y coordinate
 	 */
-	public void setY(final int y)
+	public void setY(final double y)
 	{
 		this.coordinate.y = y;
 	}
@@ -87,9 +96,9 @@ public class Vertex {
 	 * 
 	 * @return Y coordinate
 	 */
-	public int getY()
+	public double getY()
 	{
-		return (int) this.coordinate.y;
+		return this.coordinate.y;
 	}
 
 	/**
@@ -126,14 +135,10 @@ public class Vertex {
 	 * 
 	 * @return ID of vertex and coordinates
 	 */
+	@Override
 	public String toString()
 	{
-		return this.id + " : (" + (int) this.coordinate.x + ", " + (int) this.coordinate.y + ")";
-	}
-
-	public boolean compare(Vertex vertex) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.id + " : (" + this.coordinate.x + ", " + this.coordinate.y + ")";
 	}
 
 }

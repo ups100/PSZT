@@ -8,7 +8,7 @@ import java.util.Random;
  * 
  * @author Kajo
  */
-public class Entity {
+public class Entity implements Comparable<Entity> {
 
 	/** List of connectors */
 	private ArrayList<Connector> connectors = new ArrayList<Connector>();
@@ -17,18 +17,26 @@ public class Entity {
 	private int bornGeneration;
 
 	/*
+	 * Optimization get
+	 */
+	/** Area which entity covers target multi segment */
+	private double coveredArea = -1;
+
+	/*
 	 * Just for debug information
 	 */
-	/** Area of overlapping segments */
+	/** Area of overlapping segments in entity */
 	private double overlapArea = -1;
-
-	/** Area which covers target */
-	private double coveredArea = -1;
 
 	/** Target area */
 	private double targetArea = -9999;
+
+	public static int i = 0;
+	public int id = i++;
+	/*
+	 * End of debug info declaration
+	 */
 	
-	private int numberOfSegments;
 	/**
 	 * C-tor
 	 * set generation number
@@ -41,15 +49,15 @@ public class Entity {
 		
 	}
 
-	public Entity(final Entity entity)
+	/**
+	 * Create target entity from multi segment
+	 */
+	public Entity(MultiSegment multiSegment)
 	{
-		this.bornGeneration = entity.bornGeneration;
-		this.overlapArea = entity.overlapArea;
-		this.coveredArea = entity.coveredArea;
-		this.targetArea = entity.targetArea;
-		this.connectors = new ArrayList<Connector>(entity.connectors);
-		this.numberOfSegments = connectors.size();
+		for (Segment segment : multiSegment.getSegments())
+			this.connectors.add(new Connector(segment, multiSegment, segment.getVertices().get(0), segment.getVertices().get(0), true));
 	}
+
 	/**
 	 * Add connector between segment, vertex from segment and vertex from target segment to the entity
 	 * 
@@ -58,7 +66,7 @@ public class Entity {
 	public void addConnector(final Connector connector)
 	{
 		this.connectors.add(connector);
-		this.numberOfSegments++;
+
 		// Some optimization, that entity has changed
 		this.coveredArea = -1;
 	}
@@ -66,26 +74,29 @@ public class Entity {
 	/**
 	 * 
 	 * @param other "Father" in a relationship (this is mother!)
-	 * @return baby
+	 * @return baby entity
 	 * @brief separator is a decision what is taken from mother
 	 */
-	public Entity copulateWith(final Entity other)
+	public Entity copulateWith(final Entity other, int copulateGeneration)
 	{
-		Entity baby = new Entity(this.bornGeneration);
+		Entity baby = new Entity(copulateGeneration + 1);
 		Random generator = new Random();		
-		int separator = generator.nextInt(numberOfSegments-1) +1;
-		int i = 0;
-		for (;i<separator; ++i)
+		int separator = generator.nextInt(this.connectors.size() - 1);
+
+		for (int i = 0; i < this.connectors.size(); ++i)
 		{
-			baby.addConnector(new Connector(this.connectors.get(i)));
+			if (i < separator)
+				baby.addConnector(this.connectors.get(i).clone());
+			else
+				baby.addConnector(other.connectors.get(i).clone());
 		}
-		for(;i<numberOfSegments;++i)
-		{
-			baby.addConnector(new Connector(other.connectors.get(i)));
-		}	
+
 		return baby;
 	}
 
+	/**
+	 * Mutate entity
+	 */
 	public void mutateEntity()
 	{
 		// TODO mutation algorithm 
@@ -97,31 +108,33 @@ public class Entity {
 		 */
 		Random generator = new Random();
 
-		int connectorToChange = generator.nextInt(numberOfSegments);
-		Connector mutant = connectors.get(connectorToChange);
-		int actualVertex = mutant.getSegmentVertex().getId();
-		ArrayList<Vertex>  baseForSearching = mutant.getSegment().getVertices();
+		// Choose connector to mutate
+		int connectorId = generator.nextInt(this.connectors.size());
+		Connector connectorToMutate = this.connectors.get(connectorId);
+
+		// Get its segment
+		Segment segmentToMove = connectorToMutate.getSegment();
+
+		// Choose vertex to move segment by
+		ArrayList<Vertex> verticesToChange = segmentToMove.getVertices();
+		int segmentVertexId = generator.nextInt(verticesToChange.size());
+
+		Vertex segmentVertex = verticesToChange.get(segmentVertexId);
+		// Set new segment vertex in connector
+		connectorToMutate.setSegmentVertex(segmentVertex);
+
+		// Choose vertex to move segment to
+		ArrayList<Vertex> verticesToMoveTo = connectorToMutate.getTargetSegment().getVertices();
+		int targetSegmentVertexId = generator.nextInt(verticesToMoveTo.size());
+
+		Vertex targetSegmentVertex = verticesToMoveTo.get(targetSegmentVertexId);
+		// Set new target vertex in connector
+		connectorToMutate.setTargetSegmentVertex(targetSegmentVertex);
+
 		
-		int newVertex = actualVertex;
-		while (newVertex == actualVertex)
-		{
-			try
-			{
-				newVertex = baseForSearching.get(generator.nextInt(baseForSearching.size())).getId();			
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
+		// Do proper mutation
+		segmentToMove.moveToVertexByVertex(targetSegmentVertex, segmentVertex);
 		
-		mutant.getSegment().moveToVertexByVertex(mutant.getTargetSegmentVertex(),mutant.getSegment().getVertexById(newVertex));
-		
-		
-		
-		/**
-		 * Random vertex from the segment, will be changed
-		 */
 		
 		// Some optimization, that entity has changed
 		this.coveredArea = -1;
@@ -153,21 +166,6 @@ public class Entity {
 	 */
 	private void calculateAdaptation()
 	{
-		// Get mins to move entity connected segments to (0, 0) as minimum coordinate
-		int minX = this.connectors.get(0).getSegment().getMinX();
-		int minY = this.connectors.get(0).getSegment().getMinY();
-
-		for (int i = 0; i < this.connectors.size(); ++i)
-		{
-			int minXt = this.connectors.get(i).getSegment().getMinX();
-			if (minX > minXt)
-				minX = minXt;
-
-			int minYt = this.connectors.get(i).getSegment().getMinY();
-			if (minY > minYt)
-				minY = minYt;
-		}
-
 		MultiSegment target = this.connectors.get(0).getTargetSegment();
 		MultiSegment mp = new MultiSegment();
 
@@ -175,8 +173,10 @@ public class Entity {
 			mp.addSegment(connector.getSegment().clone());
 
 
+		// Check proper intersection
 		double[] result = target.calculateIntersectionArea(mp);
 
+		// Save information
 		this.coveredArea = result[0] - result[1];
 		this.overlapArea = result[1];
 		this.targetArea = result[2];
@@ -251,12 +251,12 @@ public class Entity {
 		return this.bornGeneration;
 	}
 
-
 	/**
 	 * Get information about entity
 	 * 
 	 * @return Entity information
 	 */
+	@Override
 	public String toString()
 	{
 		StringBuilder str = new StringBuilder();
@@ -268,23 +268,37 @@ public class Entity {
 		for (Connector connector : this.connectors)
 			str.append(connector + ";\t");
 
-		str.append(" Born in " + this.bornGeneration + " g.");
+		str.append(" ID:" + this.id + " Born in " + this.bornGeneration + " g.");
 
 		str.append(" ]");
 
 		return str.toString();
 	}
 
-
-	public boolean compare(Entity entity) 
+	/**
+	 * 
+	 * @param other
+	 * @return
+	 */
+	@Override
+	public int compareTo(Entity other)
 	{
-		for (int i = 0; i<connectors.size(); ++i)
-		{
-			if(!this.connectors.get(i).compare(entity.connectors.get(i)))
-				return false;
-		}
-		return true;
+		return (this.getAdaptationSize() < other.getAdaptationSize() ? -1 :
+				(this.getAdaptationSize() > other.getAdaptationSize() ? 1 : 0 ));
 	}
 
+	/**
+	 * To paint it
+	 * @return
+	 */
+	public ArrayList<Segment> getSegments()
+	{
+		ArrayList<Segment> segments = new ArrayList<>();
+
+		for (Connector connector : this.connectors)
+			segments.add(connector.getSegment());
+
+		return segments;
+	}
 
 }

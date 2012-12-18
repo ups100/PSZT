@@ -22,9 +22,12 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception // Don't ask :P
 	{
-		int[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
-		int[][] bigSquarePoints = { { 0, 6 }, { 3, 6 }, { 3, 3 }, { 0, 3 } };
-		int[][] smallSquarePoints = { { 1, 3 }, { 3, 3 }, { 3, 1 }, { 1, 1 } };
+		double[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
+		double[][] bigSquarePoints = { { 0, 6 }, { 3, 6 }, { 3, 3 }, { 0, 3 } };
+		double[][] smallSquarePoints = { { 1, 3 }, { 3, 3 }, { 3, 1 }, { 1, 1 } };
+		double[][] smallSquarePoints1 = { { 1, -3 }, { 3, -3 }, { 3, 1 }, { 1, 1 } };
+		double[][] smallSquarePoints2 = { { 1, -3 }, { 3, -3 }, { 3, -5 }, { 1, -5 } };
+		double[][] smallSquarePoints3 = { { -1, -7 }, { 4, -8 }, { 3, -5 }, { 1, -5 } };
 
 		Segment triangleSegment = new Segment(trianglePoints);
 		Segment bigSquareSegment = new Segment(bigSquarePoints);
@@ -34,18 +37,44 @@ public class Main {
 		multiSegment.addSegment(triangleSegment);
 		multiSegment.addSegment(bigSquareSegment);
 		multiSegment.addSegment(smallSquareSegment);
+		multiSegment.addSegment(new Segment(smallSquarePoints1));
+		multiSegment.addSegment(new Segment(smallSquarePoints2));
+		multiSegment.addSegment(new Segment(smallSquarePoints3));
 
+		new Painter(new Entity(multiSegment));
 		Population p = new Population(multiSegment);
-		System.out.println("TE STARE TO");
-		System.out.println(p);
 		
 		
-		
+		int a = 0;
+		double best = 0;
+		double last = 0;
 		while(true)
 		{
-			if(p.nextGeneration()) break;
+			a++;
+			Entity adapt = p.nextGeneration();
+			System.out.println(adapt.getAdaptationSize());
+
+			last = adapt.getAdaptationSize();
+			if (last > best) {
+				best = last;
+				a = 0;
+			}
+			
+			if (a > 500) {
+				System.out.println(new Entity(multiSegment));
+				System.out.println(p);
+				new Painter(adapt);
+				a = 0;
+			}
+
+			if (adapt.getAdaptationSize() > 0.99)
+			{
+				System.out.println(adapt);
+				new Painter(adapt);
+				System.out.println("Adaptacja " + adapt.getAdaptationSize() + " w " + p.getGenerationNumber() + " generacji");
+				break;
+			}
 		}
-		System.out.println("Everything is done");
 	}
 
 	/**

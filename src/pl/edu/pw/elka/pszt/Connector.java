@@ -12,13 +12,11 @@ public class Connector {
 	/** Target Segment reference */
 	private MultiSegment targetSegment;
 
-	/** Beggining of binomial theorem (fuck yeah!) */
-	
-	/** Vertex of target segment connected to
-	 * 	Uno!
-	 *  */
+	/** Beginning of binomial theorem (fuck yeah!) */
+
+	/** Target segment vertex to which segment is connected to */
 	private Vertex targetSegmentVertex;
-	
+
 	/** Vertex of segment connected by 
 	 * 	Dos!
 	 * */
@@ -34,47 +32,49 @@ public class Connector {
 	
 	/**
 	 * C-tor
+	 * Clones segment object set as reference targetVertex & targetSegment which is 'readOnly'
+	 * Moves segment, if specified, by segmentVertex to attach id to targetVertex
 	 * 
 	 * @param segment Segment connecting to target by
 	 * @param targetSegment Target tangram segment as reference
 	 * @param targetVertex Vertex of segment which connects by to target
 	 * @param segmentVertex  Vertex of targetSegment to connect segment to
+	 * @param noMove If we want to not moving it 
 	 */
 	public Connector(final Segment segment, final MultiSegment targetSegment, final Vertex segmentVertex,
-																							final Vertex targetVertex)
+																			final Vertex targetVertex, boolean noMove)
 	{
 		this.segment = segment.clone();
 		this.targetSegment = targetSegment;
 
 		this.targetSegmentVertex = targetVertex;
-		this.segmentVertex = segmentVertex;
+		this.segmentVertex = this.segment.getVertexById(segmentVertex.getId());
 	
-		this.segment.moveToVertexByVertex(this.targetSegmentVertex, this.segmentVertex);
+		if (!noMove)
+			this.segment.moveToVertexByVertex(targetVertex, this.segmentVertex);
 	}
 
-	public Connector(final Connector connector)
-	{
-		this(connector.getSegment().clone(),connector.targetSegment, connector.segmentVertex, connector.targetSegmentVertex);
-	}
 	/**
 	 * C-tor
 	 * random connection vertices and invoke other c-tor
 	 * 
 	 * @param segment Segment connecting to target by
 	 * @param targetSegment Target tangram segment as reference
+	 * @param noMove If we want to not moving it
 	 */
-	public Connector(final Segment segment, final MultiSegment targetSegment)
+	public Connector(final Segment segment, final MultiSegment targetSegment, boolean noMove)
 	{
-		
-		this(segment, targetSegment, segment.getRandomVertex(), targetSegment.getRandomVertex());
-		
-		
+		this(segment, targetSegment, segment.getRandomVertex(), targetSegment.getRandomVertex(), noMove);
 	}
-	
-	public Connector getConnection()
+
+	/**
+	 * Clone connector element
+	 * @return cloned connector
+	 */
+	@Override
+	public Connector clone()
 	{
-		Connector c = new Connector(this.segment,this.targetSegment, this.segmentVertex,this.targetSegmentVertex);
-		return c;
+		return new Connector(this.segment, this.targetSegment, this.segmentVertex, this.targetSegmentVertex, true);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class Connector {
 		this.targetSegmentVertex = targetSegmentVertex;
 	}
 
-	/**		//this.segment.moveToVertexByVertex(this.targetSegmentVertex, this.segmentVertex);
+	/**
 	 * @return the segmentVertex
 	 */
 	public Vertex getSegmentVertex()
@@ -134,15 +134,6 @@ public class Connector {
 	{
 		return this.segment + "\tlinked to target vertex " + this.targetSegmentVertex + " by "
 																						+ this.segmentVertex;
-	}
-
-	public boolean compare(Connector connector) {
-		if(this.segment.getId() != connector.segment.getId())
-			return false;
-		if(this.targetSegmentVertex.getId() != connector.targetSegmentVertex.getId())
-			return false;
-		if(this.segmentVertex.getId() != connector.segmentVertex.getId());
-		return true;
 	}
 
 }
