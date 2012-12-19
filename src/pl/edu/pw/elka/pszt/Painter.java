@@ -11,20 +11,30 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Painter extends JFrame {
-
-	public Painter(Entity entity)
+	private double beginX;
+	private double beginY;
+	public Painter(MultiSegment multiSegment)
 	{
-		 super(entity.id + " : " + entity.getAdaptationSize());
-
+		super();
 		this.setBounds(100, 100, 500, 500);
-
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+		Entity entity = new Entity(multiSegment);
 		paintEntity(entity);
 	}
-
-	private void paintEntity(final Entity entity) {
+	
+	public Painter(Entity entity)
+	{
+		super();
+		//beginX = entity.getConnectors().get(0).getTargetSegment().getMinX();
+		//beginY = entity.getConnectors().get(0).getTargetSegment().getMinY();
+		this.setBounds(100,100,500,500);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		paintEntity(entity);
+	}
+	private void paintEntity(final Entity entity) 
+	{
 		this.add(new JPanel()
 		{
 			public void paintComponent(Graphics g)
@@ -33,7 +43,7 @@ public class Painter extends JFrame {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				int scale = 20;
-
+				
 				ArrayList<Segment> segments = entity.getSegments();
 
 				for (Segment segment : segments)
@@ -44,15 +54,15 @@ public class Painter extends JFrame {
 					int blue = random.nextInt(256);
 
 					g2.setColor(new Color(red, green, blue));
-					g2.setStroke(new BasicStroke(new Random().nextInt(segments.size()) + 1));
+					g2.setStroke(new BasicStroke(random.nextInt(segments.size()) + 1));
 					ArrayList<Vertex> vertices = segment.getVertices();
 
 					for (int i = 0; i < vertices.size(); ++i)
 					{
-						g2.drawLine(250 + scale * (int) vertices.get(i).getX(),
-									250 + scale * (int) -vertices.get(i).getY(),
-									250 + scale * (int) vertices.get((i + 1) % vertices.size()).getX(),
-									250 + scale * (int) -vertices.get((i + 1) % vertices.size()).getY());
+						g2.drawLine(scale * (int) vertices.get(i).getX(),
+									 scale * (int) vertices.get(i).getY(),
+									 scale * (int) vertices.get((i + 1) % vertices.size()).getX(),
+									 scale * (int) vertices.get((i + 1) % vertices.size()).getY());
 					}
 				}
 			}

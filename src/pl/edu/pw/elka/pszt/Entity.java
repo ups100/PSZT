@@ -1,10 +1,7 @@
 package pl.edu.pw.elka.pszt;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 
 /**
@@ -85,7 +82,6 @@ public class Entity implements Comparable<Entity> {
 	{
 		Entity baby = new Entity(copulateGeneration + 1);
 		Random generator = new Random();		
-		int separator = generator.nextInt(this.connectors.size() - 1);
 		
 		int numberTakenFromThis;
 		int numberTakenFromOther;
@@ -104,15 +100,12 @@ public class Entity implements Comparable<Entity> {
 			 numberTakenFromThis = this.connectors.size() - numberTakenFromOther;
 		}
 		
-		
 		int fromThis = 0;
 		int fromOther = 0;
 		for(int i = 0; i<this.connectors.size(); ++i)
 		{
-			boolean tmp = generator.nextBoolean();
-			
-			
-			if(tmp = true)
+			boolean tmp = generator.nextBoolean();						
+			if(tmp)
 			{
 				if(fromThis<numberTakenFromThis)
 				{
@@ -140,33 +133,18 @@ public class Entity implements Comparable<Entity> {
 			}
 			
 		}
-		/*for (int i = 0; i < this.connectors.size(); ++i)
-		{
-			if (i < separator)
-				baby.addConnector(this.connectors.get(i).clone());
-			else
-				baby.addConnector(other.connectors.get(i).clone());
-		}
-		/*Collections.sort(connectors);
-		Collections.sort(other.getConnectors());
-		for(int i = 0; i<this.connectors.size(); ++i)
-		{
-			//baby.addConnector(this.connectors.get(i)) 
-		}*/
+	
 		return baby;
 	}
 
-	public ArrayList<Connector> getConnectors()
-	{
-		return this.connectors;
-	}
+
 
 	/**
 	 * Mutate entity
 	 */
 	public void mutateEntity()
 	{
-		// TODO mutation algorithm 
+		
 		// Access to necessary segments inside connectors
 		/**
 		 * Decision: Just one connection is mutated
@@ -209,8 +187,7 @@ public class Entity implements Comparable<Entity> {
 	 */
 	public double getAdaptationSize()
 	{
-		// TODO question if we accept overlapping entities ? -> answer: much easier ;) it's random algorithm anyway..
-
+		
 		// If already computed
 		if (this.coveredArea < 0)
 			calculateAdaptation();
@@ -312,12 +289,15 @@ public class Entity implements Comparable<Entity> {
 		return this.bornGeneration;
 	}
 
+	public ArrayList<Connector> getConnectors()
+	{
+		return this.connectors;
+	}
 	/**
 	 * Get information about entity
 	 * 
 	 * @return Entity information
 	 */
-	@Override
 	public String toString()
 	{
 		StringBuilder str = new StringBuilder();
@@ -341,7 +321,6 @@ public class Entity implements Comparable<Entity> {
 	 * @param other
 	 * @return
 	 */
-	@Override
 	public int compareTo(Entity other)
 	{
 		return (this.getAdaptationSize() < other.getAdaptationSize() ? -1 :

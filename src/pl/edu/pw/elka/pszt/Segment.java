@@ -93,7 +93,7 @@ public class Segment {
 		for (; i < this.vertices.size(); ++i)
 			coordinates[i] = this.vertices.get(i).getCoordinate();
 
-		// Close shape
+		
 		coordinates[i] = this.vertices.get(0).getCoordinate();
 
 		LinearRing polygonRing = geometryFactory.createLinearRing(coordinates);

@@ -116,7 +116,8 @@ public class Vertex {
 	 * 
 	 * @param coordinate Coordinate to set
 	 */
-	public void setCoordinate(final Coordinate coordinate) {
+	public void setCoordinate(final Coordinate coordinate) 
+	{
 		this.coordinate = coordinate;
 	}
 

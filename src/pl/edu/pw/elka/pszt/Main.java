@@ -22,7 +22,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception // Don't ask :P
 	{
-		/*double[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
+		double[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
 		double[][] bigSquarePoints = { { 0, 6 }, { 3, 6 }, { 3, 3 }, { 0, 3 } };
 		double[][] smallSquarePoints = { { 1, 3 }, { 3, 3 }, { 3, 1 }, { 1, 1 } };
 		double[][] smallSquarePoints1 = { { 1, -3 }, { 3, -3 }, { 3, 1 }, { 1, 1 } };
@@ -33,24 +33,24 @@ public class Main {
 		Segment bigSquareSegment = new Segment(bigSquarePoints);
 		Segment smallSquareSegment = new Segment(smallSquarePoints);
 
-		
+		MultiSegment multiSegment = new MultiSegment();
 		multiSegment.addSegment(triangleSegment);
 		multiSegment.addSegment(bigSquareSegment);
 		multiSegment.addSegment(smallSquareSegment);
 		multiSegment.addSegment(new Segment(smallSquarePoints1));
 		multiSegment.addSegment(new Segment(smallSquarePoints2));
 		multiSegment.addSegment(new Segment(smallSquarePoints3));
-*/
-		MultiSegment multiSegment = new MultiSegment();
+
+		/*MultiSegment multiSegment = new MultiSegment();
 		 multiSegment.addSegment(new Segment(new double[][] {{77,1},{102,40},{61,67},{35,24}}));
          multiSegment.addSegment(new Segment(new double[][] {{8,66},{104,67},{105,163}}));
          multiSegment.addSegment(new Segment(new double[][] {{107,67},{154,116},{154,163},{105,116}}));
          multiSegment.addSegment(new Segment(new double[][] {{49,107},{144,205},{49,205}}));
          multiSegment.addSegment(new Segment(new double[][] {{131,191},{180,191},{179,239}}));
          multiSegment.addSegment(new Segment(new double[][] {{0,211,},{49,163},{48,258}}));
-         multiSegment.addSegment(new Segment(new double[][] {{49,241},{82,273},{49,308}}));
-		new Painter(new Entity(multiSegment));
-		Population p = new Population(multiSegment);
+         multiSegment.addSegment(new Segment(new double[][] {{49,241},{82,273},{49,308}}));*/
+         new Painter(multiSegment);
+         Population p = new Population(multiSegment);
 		
 		
 		int a = 0;
@@ -63,28 +63,21 @@ public class Main {
 			generationNumber++;
 			a++;
 			Entity adapt = p.nextGeneration();
-			/*for(Entity e: p.getEntities())
-			{
-				System.out.println(e.getAdaptationSize());
-			}*/
-			//System.out.println("PRZERWA");
-			System.out.println(adapt.getAdaptationSize());
+			new Painter(adapt);
 			System.out.println(p.getGenerationNumber());
+			System.out.println(adapt.getAdaptationSize());
+			
 			last = adapt.getAdaptationSize();
-			if (last > best) {
+			if (last > best) 
+			{
 				best = last;
 				a = 0;
 			}
 			
-			if (a > 5) {
-				/*System.out.println(new Entity(multiSegment));
-				System.out.println(p);
-				new Painter(adapt);
-				a = 0;*/
-				
+			if (a > 5) 
+			{
 				p.mutateRandomly();
-				a=0;
-				
+				a=0;			
 			}
 
 			if (adapt.getAdaptationSize() > condition)

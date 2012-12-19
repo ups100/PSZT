@@ -82,22 +82,6 @@ public class MultiSegment {
 		this.overlapArea = minus;
 	}
 	
-	/**
-	 * Get segment instance by given id from segment list
-	 * 
-	 * @param id Segment id
-	 * @return Segment instance if found equal id
-	 * @throws Exception if no id found
-	 * @deprecated not used
-	 */
-	public Segment getSegmentById(final int id) throws Exception
-	{
-		for (Segment s : this.segments)
-			if (id == s.getId())
-				return s;
-
-		throw new Exception("No segment found in model");
-	}
 
 	/**
 	 * Get random vertex from segment
@@ -143,7 +127,7 @@ public class MultiSegment {
 	 * Calculate intersection area of this and given one
 	 * 
 	 * @param other Multi segment to check with
-//	 * @return intersection area
+	 * @return intersection area
 	 * @return array of sum of intersection source with target, source overlapping area, target covering area
 	 */
 	public double[] calculateIntersectionArea(final MultiSegment other)
@@ -215,23 +199,55 @@ public class MultiSegment {
 		return this.overlapArea;
 	}
 
-	/**
-	 * Get area which is sum of segments areas
-	 * 
-	 * @return Sum of segments areas
-	 * @deprecated not used
-	 */
-	public double getSumOfSegmentsArea()
-	{
-		return this.coveredArea + this.overlapArea;
-	}
 
+	public double getMinX()
+	{
+		double bestX = 99999;
+		for(Vertex v : this.vertices)
+		{
+			if(v.getX() < bestX)
+				bestX = v.getX();
+		}
+		return bestX;
+	}
+	
+	public double getMinY()
+	{
+		double bestY = 9999;
+		for(Vertex v : this.vertices)
+		{
+			if(v.getY() < bestY)
+				bestY = v.getY();
+		}
+		return bestY;
+	}
+	
+	public double getMaxX()
+	{
+		double bestX = -9999;
+		for(Vertex v : this.vertices)
+		{
+			if(v.getX() > bestX)
+				bestX = v.getX();
+		}
+		return bestX;
+	}
+	
+	public double getMaxY()
+	{
+		double bestY = -9999;
+		for(Vertex v : this.vertices)
+		{
+			if(v.getY() > bestY)
+				bestY = v.getY();
+		}
+		return bestY;
+	}
 	/**
 	 * Get information about segments building target segment
 	 * 
 	 * @return Multi Polygon info
 	 */
-	@Override
 	public String toString()
 	{
 		if (this.polygon != null)

@@ -7,29 +7,27 @@ package pl.edu.pw.elka.pszt;
  * 
  * @author Kajo
  */
-public class Connector implements Comparable<Connector>{
+public class Connector {
 
 	/** Target Segment reference */
 	private MultiSegment targetSegment;
 
-	/** Beginning of binomial theorem (fuck yeah!) */
-
-	/** Target segment vertex to which segment is connected to 
-	 * Uno!
+	/** 
+	 * Target segment vertex to which segment is connected to 
 	 */
 	private Vertex targetSegmentVertex;
 
-	/** Vertex of segment connected by 
-	 * 	Dos!
+	/** 
+	 * Vertex of segment connected by 
 	 * */
 	private Vertex segmentVertex;
 	
-	/** Segment connected to target segment by vertices 
-	 *  Tres!
-	 * */
+	/** 
+	 * Segment connected to target segment by vertices 
+	 */
 	private Segment segment;
 
-	/** End of binomial theorem (fuck yeah again!) */
+	
 	
 	
 	/**
@@ -62,7 +60,7 @@ public class Connector implements Comparable<Connector>{
 	 * 
 	 * @param segment Segment connecting to target by
 	 * @param targetSegment Target tangram segment as reference
-	 * @param noMove If we want to not moving it
+	 * @param noMove If we do not want to move it
 	 */
 	public Connector(final Segment segment, final MultiSegment targetSegment, boolean noMove)
 	{
@@ -73,7 +71,6 @@ public class Connector implements Comparable<Connector>{
 	 * Clone connector element
 	 * @return cloned connector
 	 */
-	@Override
 	public Connector clone()
 	{
 		return new Connector(this.segment, this.targetSegment, this.segmentVertex, this.targetSegmentVertex, true);
@@ -136,12 +133,6 @@ public class Connector implements Comparable<Connector>{
 	{
 		return this.segment + "\tlinked to target vertex " + this.targetSegmentVertex + " by "
 																						+ this.segmentVertex;
-	}
-
-	
-	public int compareTo(Connector other) 
-	{
-		return(this.segment.getId() > other.segment.getId() ? 1 : 0);		
 	}
 
 }
