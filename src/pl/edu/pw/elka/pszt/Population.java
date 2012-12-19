@@ -13,7 +13,7 @@ import java.util.Vector;
 public class Population {
 
 	/** Amount of first population at least 2! */
-	public static final int FIRST_AMOUNT = 10;
+	public static final int FIRST_AMOUNT = 50;
 
 	/** List of entities */
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -83,7 +83,7 @@ public class Population {
 
 
 		//TODO 2 Variants of selection
-		if (true)
+		if (false)
 		{
 			selectTheBestOnes(children);
 		}
@@ -168,37 +168,37 @@ public class Population {
 	 */
 	public ArrayList<Entity> copulateEntities(ArrayList<Entity> evolvingEntities)
 	{
-		/** Size of afterCopulationList is size of evolvingEntities ^ 2 
-		 * I don't know if it is right (or especially fast) but it is very hippie-style
-		 * everyone with everyone
-		 * It can be easily changed
-		 * */
-		ArrayList<Entity> afterCopulationList = new ArrayList<Entity>();
-		for(int i = 0; i < evolvingEntities.size(); ++i)
-		{
-			for (int j = 0; j < evolvingEntities.size(); ++j)
-			{
-				if (i == j) continue; //no self-love!
-				afterCopulationList.add(evolvingEntities.get(i).copulateWith(evolvingEntities.get(j), this.generationNumber));
-			}
-		}
-		return afterCopulationList;
-
-//		// My change commented
+//		/** Size of afterCopulationList is size of evolvingEntities ^ 2 
+//		 * I don't know if it is right (or especially fast) but it is very hippie-style
+//		 * everyone with everyone
+//		 * It can be easily changed
+//		 * */
 //		ArrayList<Entity> afterCopulationList = new ArrayList<Entity>();
-//
-//		// Sort them by better adaptation
-//		Collections.sort(evolvingEntities);
-//		Collections.reverse(evolvingEntities);
-//
-//		for (int i = 0; i < evolvingEntities.size() - 1; i += 2)
+//		for(int i = 0; i < evolvingEntities.size(); ++i)
 //		{
-//			Entity child = evolvingEntities.get(i).copulateWith(evolvingEntities.get(i + 1), this.generationNumber);
-//
-//			afterCopulationList.add(child);
+//			for (int j = 0; j < evolvingEntities.size(); ++j)
+//			{
+//				if (i == j) continue; //no self-love!
+//				afterCopulationList.add(evolvingEntities.get(i).copulateWith(evolvingEntities.get(j), this.generationNumber));
+//			}
 //		}
-//
 //		return afterCopulationList;
+
+		// My change commented
+		ArrayList<Entity> afterCopulationList = new ArrayList<Entity>();
+
+		// Sort them by better adaptation
+		Collections.sort(evolvingEntities);
+		Collections.reverse(evolvingEntities);
+
+		for (int i = 0; i < evolvingEntities.size() - 1; i += 2)
+		{
+			Entity child = evolvingEntities.get(i).copulateWith(evolvingEntities.get(i + 1), this.generationNumber);
+
+			afterCopulationList.add(child);
+		}
+
+		return afterCopulationList;
 	}
 
 	/**
@@ -209,57 +209,57 @@ public class Population {
 	 */
 	private ArrayList<Entity> getRandomEntitiesFromPopulation()
 	{
-		// yours
-		Random generator = new Random();
-		
-		/** 
-		 * Number is random now, but it can be easily changed 
-		 */
-		int theChosenOnes = 0;
-		while(theChosenOnes<4)
-		theChosenOnes = generator.nextInt(this.entities.size()-1) + 1;
-		Vector<Integer> previousNumbers = new Vector<>();
-		ArrayList<Entity> list = new ArrayList<Entity>();
-		int i = 0;
-		while (i != theChosenOnes)
-		{
-			Integer tmp = generator.nextInt(this.entities.size());
-			if(!previousNumbers.contains(tmp))
-			{			
-				previousNumbers.add(tmp);
-				/**
-				 * Just getting reference to parents
-				 * instead of cloning them
-				 */
-				//list.add(new Entity(this.entities.get(tmp)));	
-				list.add(this.entities.get(tmp));
-				i++;
-			}
-					
-		}
-		/** Just for tests whether the copy of entities is shallow or deep */
-		//this.entities.clear();
-		return list;
-
-//		// My change commented
-//		Random rand = new Random();
-//		ArrayList<Integer> lefter = new ArrayList<Integer>();
-//		ArrayList<Entity> chosen = new ArrayList<Entity>();
-//
-//		int left = rand.nextInt(this.entities.size() - 1) + 2;
-//		while (left > 0)
+//		// yours
+//		Random generator = new Random();
+//		
+//		/** 
+//		 * Number is random now, but it can be easily changed 
+//		 */
+//		int theChosenOnes = 0;
+//		while(theChosenOnes < 4)
+//		theChosenOnes = generator.nextInt(this.entities.size()-1) + 1;
+//		Vector<Integer> previousNumbers = new Vector<>();
+//		ArrayList<Entity> list = new ArrayList<Entity>();
+//		int i = 0;
+//		while (i != theChosenOnes)
 //		{
-//			int tmp = rand.nextInt(this.entities.size());
-//
-//			if (!lefter.contains(tmp))
-//			{
-//				chosen.add(this.entities.get(tmp));
-//				lefter.add(tmp);
-//				--left;
+//			Integer tmp = generator.nextInt(this.entities.size());
+//			if(!previousNumbers.contains(tmp))
+//			{			
+//				previousNumbers.add(tmp);
+//				/**
+//				 * Just getting reference to parents
+//				 * instead of cloning them
+//				 */
+//				//list.add(new Entity(this.entities.get(tmp)));	
+//				list.add(this.entities.get(tmp));
+//				i++;
 //			}
+//					
 //		}
-//
-//		return chosen;
+//		/** Just for tests whether the copy of entities is shallow or deep */
+//		//this.entities.clear();
+//		return list;
+
+		// My change commented
+		Random rand = new Random();
+		ArrayList<Integer> lefter = new ArrayList<Integer>();
+		ArrayList<Entity> chosen = new ArrayList<Entity>();
+
+		int left = rand.nextInt(this.entities.size() - 1) + 2;
+		while (left > 0)
+		{
+			int tmp = rand.nextInt(this.entities.size());
+
+			if (!lefter.contains(tmp))
+			{
+				chosen.add(this.entities.get(tmp));
+				lefter.add(tmp);
+				--left;
+			}
+		}
+
+		return chosen;
 	}
 
 	/**

@@ -55,7 +55,7 @@ public class Entity implements Comparable<Entity> {
 	public Entity(MultiSegment multiSegment)
 	{
 		for (Segment segment : multiSegment.getSegments())
-			this.connectors.add(new Connector(segment, multiSegment, segment.getVertices().get(0), segment.getVertices().get(0), true));
+			addConnector(new Connector(segment, multiSegment, segment.getVertices().get(0), segment.getVertices().get(0), true));
 	}
 
 	/**
@@ -81,15 +81,32 @@ public class Entity implements Comparable<Entity> {
 	{
 		Entity baby = new Entity(copulateGeneration + 1);
 		Random generator = new Random();		
-		int separator = generator.nextInt(this.connectors.size() - 1);
+		int separator = generator.nextInt(this.connectors.size());
+
+		ArrayList<Integer> fromMother = new ArrayList<>();
+		for (int i = 0; i < separator; ++i)
+		{
+			int tmp = generator.nextInt(this.connectors.size());
+
+			if (fromMother.contains(tmp))
+				--i;
+		}
 
 		for (int i = 0; i < this.connectors.size(); ++i)
-		{
-			if (i < separator)
-				baby.addConnector(this.connectors.get(i).clone());
-			else
-				baby.addConnector(other.connectors.get(i).clone());
-		}
+			{
+				if (fromMother.contains(i))
+					baby.addConnector(this.connectors.get(i).clone());
+				else
+					baby.addConnector(other.connectors.get(i).clone());
+			}
+
+//		for (int i = 0; i < this.connectors.size(); ++i)
+//		{
+//			if (i < separator)
+//				baby.addConnector(this.connectors.get(i).clone());
+//			else
+//				baby.addConnector(other.connectors.get(i).clone());
+//		}
 
 		return baby;
 	}
@@ -97,7 +114,7 @@ public class Entity implements Comparable<Entity> {
 	/**
 	 * Mutate entity
 	 */
-	public void mutateEntity()
+	public Entity mutateEntity()
 	{
 		// TODO mutation algorithm 
 		// Access to necessary segments inside connectors
@@ -132,6 +149,8 @@ public class Entity implements Comparable<Entity> {
 		
 		// Some optimization, that entity has changed
 		this.coveredArea = -1;
+		
+		return this;
 	}
 
 	/**
@@ -281,6 +300,15 @@ public class Entity implements Comparable<Entity> {
 				(this.getAdaptationSize() > other.getAdaptationSize() ? 1 : 0 ));
 	}
 
+	/**
+	 * To paint it
+	 * @return
+	 */
+	public MultiSegment getTargetSegment()
+	{
+		return this.connectors.get(0).getTargetSegment();
+	}
+	
 	/**
 	 * To paint it
 	 * @return

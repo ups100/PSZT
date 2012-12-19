@@ -32,7 +32,14 @@ public class Painter extends JFrame {
 				this.setBackground(Color.white);
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
-				int scale = 20;
+				int scale = 1;//20;
+				int move = 350;//250;
+				
+				g2.setColor(Color.black);
+				g2.setStroke(new BasicStroke(15));
+				for (Vertex v : entity.getTargetSegment().getVertices())
+					g2.drawLine(move + scale * (int) v.getX(), move + scale * (int) -v.getY(),
+								move + scale * (int) v.getX(), move + scale * (int) -v.getY());
 
 				ArrayList<Segment> segments = entity.getSegments();
 
@@ -49,10 +56,10 @@ public class Painter extends JFrame {
 
 					for (int i = 0; i < vertices.size(); ++i)
 					{
-						g2.drawLine(250 + scale * (int) vertices.get(i).getX(),
-									250 + scale * (int) -vertices.get(i).getY(),
-									250 + scale * (int) vertices.get((i + 1) % vertices.size()).getX(),
-									250 + scale * (int) -vertices.get((i + 1) % vertices.size()).getY());
+						g2.drawLine(move + scale * (int) vertices.get(i).getX(),
+									move + scale * (int) -vertices.get(i).getY(),
+									move + scale * (int) vertices.get((i + 1) % vertices.size()).getX(),
+									move + scale * (int) -vertices.get((i + 1) % vertices.size()).getY());
 					}
 				}
 			}

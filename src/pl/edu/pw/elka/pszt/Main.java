@@ -2,6 +2,8 @@ package pl.edu.pw.elka.pszt;
 
 
 
+import java.util.Random;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
@@ -34,14 +36,29 @@ public class Main {
 		Segment smallSquareSegment = new Segment(smallSquarePoints);
 
 		MultiSegment multiSegment = new MultiSegment();
-		multiSegment.addSegment(triangleSegment);
-		multiSegment.addSegment(bigSquareSegment);
-		multiSegment.addSegment(smallSquareSegment);
-		multiSegment.addSegment(new Segment(smallSquarePoints1));
-		multiSegment.addSegment(new Segment(smallSquarePoints2));
-		multiSegment.addSegment(new Segment(smallSquarePoints3));
+//		multiSegment.addSegment(triangleSegment);
+//		multiSegment.addSegment(bigSquareSegment);
+//		multiSegment.addSegment(smallSquareSegment);
+//		multiSegment.addSegment(new Segment(smallSquarePoints1));
+//		multiSegment.addSegment(new Segment(smallSquarePoints2));
+//		multiSegment.addSegment(new Segment(smallSquarePoints3));
+//
+//		Random r = new Random();
+//		multiSegment.addSegment(new Segment(new double[][] {{8,6},
+//															{10,12},
+//															{11,11},
+//															{9,7}}));
+		multiSegment.addSegment(new Segment(new double[][] {{77,1},{102,40},{61,67},{35,24}}));
+		multiSegment.addSegment(new Segment(new double[][] {{8,66},{104,67},{105,163}}));
+		multiSegment.addSegment(new Segment(new double[][] {{107,67},{154,116},{154,163},{105,116}}));
+		multiSegment.addSegment(new Segment(new double[][] {{49,107},{144,205},{49,205}}));
+		multiSegment.addSegment(new Segment(new double[][] {{131,191},{180,191},{179,239}}));
+		multiSegment.addSegment(new Segment(new double[][] {{0,211,},{49,163},{48,258}}));
+		multiSegment.addSegment(new Segment(new double[][] {{49,241},{82,273},{49,308}}));
 
-		new Painter(new Entity(multiSegment));
+		Entity targetEntity = new Entity(multiSegment);
+		new Painter(targetEntity);
+
 		Population p = new Population(multiSegment);
 		
 		
@@ -59,9 +76,9 @@ public class Main {
 				best = last;
 				a = 0;
 			}
-			
-			if (a > 500) {
-				System.out.println(new Entity(multiSegment));
+
+			if (a > 50) {
+				System.out.println(targetEntity);
 				System.out.println(p);
 				new Painter(adapt);
 				a = 0;
