@@ -23,7 +23,8 @@ public class Population {
 
 	/** Number of generation */
 	private int generationNumber = 0;
-
+	
+	private boolean which = false;
 	/**
 	 * C-tor, creates first population entities
 	 * 
@@ -64,7 +65,7 @@ public class Population {
 		this.generationNumber++;
 
 		/**
-		 * Choose entities from population to copuplate them
+		 * Choose entities from population to copulate them
 		 */
 		ArrayList<Entity> evolvingEntities = getRandomEntitiesFromPopulation();
 
@@ -83,20 +84,29 @@ public class Population {
 
 
 		//TODO 2 Variants of selection
-		if (true)
+		//if (which)
+		//{
+			//selectTheBestOnes(children);
+			//which = false;
+			
+	//	}
+		/*else
 		{
-			selectTheBestOnes(children);
-		}
-		else
-		{
+			
 			// Add children to population
 			this.entities.addAll(children);
 	
-			/**
-			 * Get best adapted entities
-			 */
+
+			
+			 
 			selectBestAdaptedEntities();
-		}
+			which = true;
+		}*/
+	
+	this.entities.addAll(children);
+		//this.entities = children;
+	selectBestAdaptedEntities();
+	//selectTheBestOnes();
 
 
 		return getMostAdaptedEntity();
@@ -107,12 +117,13 @@ public class Population {
 	 * 
 	 * @param children Children after mutation
 	 */
-	private void selectTheBestOnes(ArrayList<Entity> children)
+	//private void selectTheBestOnes(ArrayList<Entity> children)
+	private void selectTheBestOnes()
 	{
 //		// my change Variant 1
 		//TODO check remove that
 		ArrayList<Entity> allEntities = new ArrayList<>(this.entities);
-		allEntities.addAll(children);
+		//allEntities.addAll(children);
 
 		Collections.sort(allEntities);
 		Collections.reverse(allEntities);
@@ -120,19 +131,22 @@ public class Population {
 		ArrayList<Entity> newPopulation = new ArrayList<>();
 
 		// Get at most half of parent entities
-		int parentsLeft = Math.max(this.entities.size() / 2, this.entities.size() - children.size());
-
+		// Change in here
+		//int parentsLeft = Math.max(this.entities.size() / 2, this.entities.size() - children.size());
+		int parentsLeft = this.entities.size()/2;
+		
 		for (int i = 0; i < allEntities.size(); ++i)
 		{
 			Entity ent = allEntities.get(i);
 
 			// If parents are enough don't add
 			if (this.entities.contains(ent))
+			{
 				if (parentsLeft <= 0)
 					continue;
 				else
 					--parentsLeft;
-
+			}
 			newPopulation.add(ent);
 
 			if (newPopulation.size() == FIRST_AMOUNT)
@@ -158,8 +172,12 @@ public class Population {
 		Collections.reverse(check);
 
 		for (int i = 0; i < check.size(); ++i)
+		{
 			if (i >= FIRST_AMOUNT)
+			{
 				this.entities.remove(check.get(i));
+			}
+		}
 	}
 
 	/**
@@ -217,7 +235,7 @@ public class Population {
 		 */
 		int theChosenOnes = 0;
 		while(theChosenOnes<4)
-		theChosenOnes = generator.nextInt(this.entities.size()-1) + 1;
+			theChosenOnes = generator.nextInt(this.entities.size()-1) + 1;
 		Vector<Integer> previousNumbers = new Vector<>();
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		int i = 0;
@@ -231,7 +249,7 @@ public class Population {
 				 * Just getting reference to parents
 				 * instead of cloning them
 				 */
-				//list.add(new Entity(this.entities.get(tmp)));	
+				
 				list.add(this.entities.get(tmp));
 				i++;
 			}
@@ -277,6 +295,29 @@ public class Population {
 		return en.get(0);
 	}
 
+	public void mutateRandomly()
+	{	
+		for(int i = 0; i <this.entities.size(); ++i)
+		{			
+			if((this.entities.get(0).getAdaptationSize() - this.entities.get(i).getAdaptationSize()) < 0.1)
+				this.entities.get(i).mutateEntity();
+			else break;
+		}	
+		this.entities.get(0).mutateEntity();
+	}
+	
+	/*public void removeTheBest()
+	{
+		Collections.sort(this.entities);
+		Collections.reverse(this.entities);
+		for(int i = this.entities.size()-1; i>((this.entities.size()/4)*3); --i)
+		{
+			this.entities.remove(i);
+		}
+		
+		Collections.reverse(this.entities);
+		
+	}*/
 	/**
 	 * Get number of actual generation
 	 * 
@@ -307,8 +348,12 @@ public class Population {
 		// TODO Auto-generated method stub
 		for (Entity e : this.entities) {
 			e.mutateEntity();
-		}
-		
+		}	
+	}
+	
+	public ArrayList<Entity> getEntities()
+	{
+		return this.entities;
 	}
 
 }

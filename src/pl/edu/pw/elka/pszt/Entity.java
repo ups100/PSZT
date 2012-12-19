@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pszt;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 /**
  * Represents entity made of connectors and segments as well
@@ -82,14 +83,67 @@ public class Entity implements Comparable<Entity> {
 		Entity baby = new Entity(copulateGeneration + 1);
 		Random generator = new Random();		
 		int separator = generator.nextInt(this.connectors.size() - 1);
-
-		for (int i = 0; i < this.connectors.size(); ++i)
+		
+		int numberTakenFromThis;
+		int numberTakenFromOther;
+		
+		double max = Math.max(this.getAdaptationSize(), other.getAdaptationSize());
+		double min = Math.min(this.getAdaptationSize(), other.getAdaptationSize());
+		if(this.getAdaptationSize() > other.getAdaptationSize())
+		{
+			 numberTakenFromThis = (int) ((double)this.connectors.size() * (min/max));
+			 numberTakenFromOther = this.connectors.size() - numberTakenFromThis;
+			
+		}
+		else
+		{
+			 numberTakenFromOther = (int) ((double)this.connectors.size() * (min/max));
+			 numberTakenFromThis = this.connectors.size() - numberTakenFromOther;
+		}
+		
+		
+		int fromThis = 0;
+		int fromOther = 0;
+		for(int i = 0; i<this.connectors.size(); ++i)
+		{
+			boolean tmp = generator.nextBoolean();
+			
+			
+			if(tmp = true)
+			{
+				if(fromThis<numberTakenFromThis)
+				{
+					baby.addConnector(this.connectors.get(i).clone());
+					fromThis++;
+				}
+				else
+				{
+					baby.addConnector(other.connectors.get(i).clone());
+					fromOther++;
+				}
+			}
+			else
+			{
+				if(fromOther<numberTakenFromOther)
+				{
+					baby.addConnector(other.connectors.get(i).clone());
+					fromOther++;
+				}
+				else
+				{
+					baby.addConnector(this.connectors.get(i).clone());
+					fromThis++;
+				}
+			}
+			
+		}
+		/*for (int i = 0; i < this.connectors.size(); ++i)
 		{
 			if (i < separator)
 				baby.addConnector(this.connectors.get(i).clone());
 			else
 				baby.addConnector(other.connectors.get(i).clone());
-		}
+		}*/
 
 		return baby;
 	}
@@ -107,7 +161,8 @@ public class Entity implements Comparable<Entity> {
 		 * but this means loops, draw without returning and other weird stuff
 		 */
 		Random generator = new Random();
-
+		int numberOfVertices = generator.nextInt(this.connectors.size()/2);
+		//for (int i = 0; i<numberOfVertices; ++i) 
 		// Choose connector to mutate
 		int connectorId = generator.nextInt(this.connectors.size());
 		Connector connectorToMutate = this.connectors.get(connectorId);

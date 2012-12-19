@@ -52,6 +52,11 @@ public class Main {
 		{
 			a++;
 			Entity adapt = p.nextGeneration();
+			/*for(Entity e: p.getEntities())
+			{
+				System.out.println(e.getAdaptationSize());
+			}*/
+			//System.out.println("PRZERWA");
 			System.out.println(adapt.getAdaptationSize());
 
 			last = adapt.getAdaptationSize();
@@ -60,11 +65,15 @@ public class Main {
 				a = 0;
 			}
 			
-			if (a > 500) {
-				System.out.println(new Entity(multiSegment));
+			if (a > 5) {
+				/*System.out.println(new Entity(multiSegment));
 				System.out.println(p);
 				new Painter(adapt);
-				a = 0;
+				a = 0;*/
+				
+				p.mutateRandomly();
+
+				//a = 0;
 			}
 
 			if (adapt.getAdaptationSize() > 0.99)
