@@ -1,8 +1,11 @@
 package pl.edu.pw.elka.pszt;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.Vector;
+
 
 /**
  * Represents entity made of connectors and segments as well
@@ -143,9 +146,19 @@ public class Entity implements Comparable<Entity> {
 				baby.addConnector(this.connectors.get(i).clone());
 			else
 				baby.addConnector(other.connectors.get(i).clone());
+		}
+		/*Collections.sort(connectors);
+		Collections.sort(other.getConnectors());
+		for(int i = 0; i<this.connectors.size(); ++i)
+		{
+			//baby.addConnector(this.connectors.get(i)) 
 		}*/
-
 		return baby;
+	}
+
+	public ArrayList<Connector> getConnectors()
+	{
+		return this.connectors;
 	}
 
 	/**
@@ -161,8 +174,7 @@ public class Entity implements Comparable<Entity> {
 		 * but this means loops, draw without returning and other weird stuff
 		 */
 		Random generator = new Random();
-		int numberOfVertices = generator.nextInt(this.connectors.size()/2);
-		//for (int i = 0; i<numberOfVertices; ++i) 
+		
 		// Choose connector to mutate
 		int connectorId = generator.nextInt(this.connectors.size());
 		Connector connectorToMutate = this.connectors.get(connectorId);

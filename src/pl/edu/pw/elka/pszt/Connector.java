@@ -7,14 +7,16 @@ package pl.edu.pw.elka.pszt;
  * 
  * @author Kajo
  */
-public class Connector {
+public class Connector implements Comparable<Connector>{
 
 	/** Target Segment reference */
 	private MultiSegment targetSegment;
 
 	/** Beginning of binomial theorem (fuck yeah!) */
 
-	/** Target segment vertex to which segment is connected to */
+	/** Target segment vertex to which segment is connected to 
+	 * Uno!
+	 */
 	private Vertex targetSegmentVertex;
 
 	/** Vertex of segment connected by 
@@ -134,6 +136,12 @@ public class Connector {
 	{
 		return this.segment + "\tlinked to target vertex " + this.targetSegmentVertex + " by "
 																						+ this.segmentVertex;
+	}
+
+	
+	public int compareTo(Connector other) 
+	{
+		return(this.segment.getId() > other.segment.getId() ? 1 : 0);		
 	}
 
 }

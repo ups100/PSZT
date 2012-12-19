@@ -13,7 +13,7 @@ import java.util.Vector;
 public class Population {
 
 	/** Amount of first population at least 2! */
-	public static final int FIRST_AMOUNT = 10;
+	public static final int FIRST_AMOUNT = 100;
 
 	/** List of entities */
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -106,6 +106,7 @@ public class Population {
 	this.entities.addAll(children);
 		//this.entities = children;
 	selectBestAdaptedEntities();
+	
 	//selectTheBestOnes();
 
 
@@ -178,6 +179,7 @@ public class Population {
 				this.entities.remove(check.get(i));
 			}
 		}
+		//Collections.sort(this.entities);
 	}
 
 	/**
@@ -234,7 +236,7 @@ public class Population {
 		 * Number is random now, but it can be easily changed 
 		 */
 		int theChosenOnes = 0;
-		while(theChosenOnes<4)
+		while((theChosenOnes<10) || (theChosenOnes>(FIRST_AMOUNT/2)))
 			theChosenOnes = generator.nextInt(this.entities.size()-1) + 1;
 		Vector<Integer> previousNumbers = new Vector<>();
 		ArrayList<Entity> list = new ArrayList<Entity>();
@@ -287,17 +289,24 @@ public class Population {
 	 */
 	private Entity getMostAdaptedEntity()
 	{
-		ArrayList<Entity> en = new ArrayList<Entity>(this.entities);
-		
-		Collections.sort(en);
-		Collections.reverse(en);
-
-		return en.get(0);
+		int max = -1;
+		double maxAdaptation = -2;
+		for(int i = 0; i<this.entities.size();++i)
+		{
+			if(this.entities.get(i).getAdaptationSize() > maxAdaptation)
+			{
+				max = i;
+				maxAdaptation = this.entities.get(i).getAdaptationSize();
+				
+			}
+		}
+		return this.entities.get(max);
 	}
 
 	public void mutateRandomly()
 	{	
-		for(int i = 0; i <this.entities.size(); ++i)
+		Collections.sort(this.entities);
+		for(int i = 1; i <this.entities.size(); ++i)
 		{			
 			if((this.entities.get(0).getAdaptationSize() - this.entities.get(i).getAdaptationSize()) < 0.1)
 				this.entities.get(i).mutateEntity();
@@ -349,6 +358,15 @@ public class Population {
 		for (Entity e : this.entities) {
 			e.mutateEntity();
 		}	
+	}
+	public double getBestAdaptation()
+	{
+		ArrayList<Entity> en = new ArrayList<Entity>(this.entities);
+		
+		Collections.sort(en);
+		Collections.reverse(en);
+
+		return en.get(0).getAdaptationSize();
 	}
 	
 	public ArrayList<Entity> getEntities()
