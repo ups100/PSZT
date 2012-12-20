@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pszt;
 
 
 
+import java.util.Calendar;
 import java.util.Vector;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -44,7 +45,6 @@ public class Main {
 		multiSegment.addSegment(new Segment(smallSquarePoints2));
 		multiSegment.addSegment(new Segment(smallSquarePoints3));*/
 		
-		
 		MultiSegment multiSegment = new MultiSegment();
 		 multiSegment.addSegment(new Segment(new double[][] {{77,1},{102,40},{61,67},{35,24}}));
          multiSegment.addSegment(new Segment(new double[][] {{8,66},{154,67},{105,163}}));
@@ -53,48 +53,31 @@ public class Main {
          multiSegment.addSegment(new Segment(new double[][] {{131,191},{180,191},{179,239}}));
          multiSegment.addSegment(new Segment(new double[][] {{0,211,},{49,163},{48,258}}));
          multiSegment.addSegment(new Segment(new double[][] {{49,241},{82,273},{49,308}}));
-         new Painter(new Entity(multiSegment), "Target Tangram");
+         new Painter(new Entity(multiSegment), new Entity(multiSegment), "Target Tangram");
          Population p = new Population(multiSegment);
 		
 		Vector<Painter> painters = new Vector<Painter>();
-		Statistics statistics = new Statistics();
-		int a = 0;
-		double best = 0;
-		double last = 0;
+		Statistics statistics = new Statistics(p);
 		double condition = 0.99;
 		int generationNumber = 0;
 		while(true)
 		{
-			generationNumber++;
-			a++;
+			generationNumber++;			
 			Entity adapt = p.nextGeneration();
-			painters.add(new Painter(adapt, "Generacja " + p.getGenerationNumber()));
-			if(painters.size() >= 2) painters.get(painters.size() -2).setVisible(false);
-			System.out.println(p.getGenerationNumber());
-			System.out.println(adapt.getAdaptationSize());
+			painters.add(new Painter(adapt, p));
+			if(painters.size() >= 2) painters.get(painters.size() -2).dispose();
+			System.out.println("Generation " + p.getGenerationNumber());
+			System.out.println(adapt);
 			statistics.addAdaptation(adapt.getAdaptationSize());
-			last = adapt.getAdaptationSize();
-			if (last > best) 
-			{
-				best = last;
-				a = 0;
-			}
-			
-			if (a > 5) 
-			{
-				p.mutateRandomly();
-				a=0;			
-			}
 
 			if (adapt.getAdaptationSize() > condition)
 			{
-				System.out.println(adapt);
-				new Painter(adapt, "Generacja " + p.getGenerationNumber());
-				System.out.println("Adaptacja " + adapt.getAdaptationSize() + " w " + p.getGenerationNumber() + " generacji");
-				statistics.showResults(p.getGenerationNumber());
+				System.out.println("Adaptation reached in " + p.getGenerationNumber() + "th" +  " generation");
+				statistics.showResults(p);
 				break;
 			}
-			if(generationNumber == 0)
+			
+			if (generationNumber > 100)
 			{
 				generationNumber = 0;
 				condition -= 0.01;

@@ -301,18 +301,7 @@ public class Entity implements Comparable<Entity> {
 	public String toString()
 	{
 		StringBuilder str = new StringBuilder();
-
-		str.append("[ ");
-
 		str.append("Adaptation = " + (int) (this.getAdaptationSize() * 100) + "%,\t");
-
-		for (Connector connector : this.connectors)
-			str.append(connector + ";\t");
-
-		str.append(" ID:" + this.id + " Born in " + this.bornGeneration + " g.");
-
-		str.append(" ]");
-
 		return str.toString();
 	}
 

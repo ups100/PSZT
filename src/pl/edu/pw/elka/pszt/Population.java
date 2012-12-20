@@ -24,6 +24,9 @@ public class Population {
 	/** Number of generation */
 	private int generationNumber = 0;
 	
+	private int mutator = 0;
+	private double lastBest;
+	
 	/**
 	 * C-tor, creates first population entities
 	 * 
@@ -32,7 +35,7 @@ public class Population {
 	public Population(final MultiSegment targetSegment) 
 	{
 		this.targetSegment = targetSegment;
-
+		lastBest = -1;
 		for (int i = 0; i < FIRST_AMOUNT; ++i)
 			this.entities.add(createRandomEntity());
 	}
@@ -63,7 +66,7 @@ public class Population {
 	public Entity nextGeneration()
 	{
 		this.generationNumber++;
-
+		mutator++;
 		/**
 		 * Choose entities from population to copulate them
 		 */
@@ -84,11 +87,23 @@ public class Population {
 			e.mutateEntity();
 		}
 			
-	this.entities.addAll(children);
+		this.entities.addAll(children);
 	
-	selectBestAdaptedEntities();
+		selectBestAdaptedEntities();
 	
-	return getMostAdaptedEntity();
+		if(getMostAdaptedEntity().getAdaptationSize() > lastBest)
+		{
+			lastBest = getMostAdaptedEntity().getAdaptationSize();
+			mutator = 0;
+		}
+	
+		if(mutator > 5)
+		{
+			this.mutateRandomly();
+			mutator = 0;
+		}
+		
+		return getMostAdaptedEntity();
 	}
 
 
@@ -245,5 +260,9 @@ public class Population {
 	{
 		return this.entities;
 	}
-
+	
+	public MultiSegment getMultiSegment()
+	{
+		return this.targetSegment;
+	}
 }

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
@@ -17,22 +18,28 @@ public class Painter extends JFrame {
 	
 	public static double X = 500;
 	public static double Y = 500;
+
 	
-	
-	public Painter(Entity entity, String s)
+	public Painter(Entity entity, Entity multiEntity, String s)
 	{
 		super(s);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setBounds(0,0,(int)dim.getWidth(),(int)dim.getHeight());
 		this.setVisible(true);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
 		ArrayList<Segment> segments = entity.getSegments();
+		ArrayList<Segment> multiSegments = multiEntity.getSegments();
 		int moveX = this.findChangeX(segments);
 		int moveY = this.findChangeY(segments);
-		paintEntity(segments, moveX, moveY, getScaleX(segments),getScaleY(segments));
+		paintEntity(segments, multiSegments, moveX, moveY, getScaleX(segments),getScaleY(segments));
 	}
 	
+	public Painter(Entity entity, Population p)
+	{
+		this(entity, new Entity(p.getMultiSegment()), "Generation " + p.getGenerationNumber() + ", Adaptation = " + entity.getAdaptationSize());
+		
+	}
+	
+
 	public int findChangeX(ArrayList<Segment> segments) 
 	{
 		int tmpMinX  = 0;
@@ -101,8 +108,8 @@ public class Painter extends JFrame {
 		return tmpY/Y;
 
 	}
-	private void paintEntity(final ArrayList<Segment> segments, final int moveX, final int moveY,
-																final double sX, final double sY) 
+	private void paintEntity(final ArrayList<Segment> segments, final ArrayList<Segment> multiSegments,
+								final int moveX, final int moveY, final double sX, final double sY) 
 	{
 		this.add(new JPanel()
 		{
@@ -121,6 +128,24 @@ public class Painter extends JFrame {
 				int correctionX = moveX>=0 ? 0 : moveX;
 				int correctionY = moveY>=0 ? 0 : moveY;
 
+				for (Segment segment : multiSegments)
+				{
+					float dash[] = {10.0f};
+					BasicStroke dashed = new BasicStroke(1.0f,
+		                    BasicStroke.CAP_BUTT,
+		                    BasicStroke.JOIN_MITER, 10.0f,dash,0.0f);
+
+					g2.setStroke(dashed);
+					ArrayList<Vertex> multiVertices = segment.getVertices();
+					for (int i = 0; i < multiVertices.size(); ++i)
+					{
+						g2.drawLine(250 + correctionX + (int)scaleX *(int) multiVertices.get(i).getX(),
+									250 + correctionY + (int)scaleY *(int) multiVertices.get(i).getY(),
+									250 + correctionX + (int)scaleX *(int) multiVertices.get((i + 1) % multiVertices.size()).getX(),
+									250 + correctionY + (int)scaleY *(int) multiVertices.get((i + 1) % multiVertices.size()).getY());
+					}
+					
+				}
 				
 				for (Segment segment : segments)
 				{
@@ -130,9 +155,8 @@ public class Painter extends JFrame {
 					int blue = random.nextInt(256);
 
 					g2.setColor(new Color(red, green, blue));
-					g2.setStroke(new BasicStroke(random.nextInt(segments.size()) + 1));
+					g2.setStroke(new BasicStroke(10));
 					ArrayList<Vertex> vertices = segment.getVertices();
-
 					for (int i = 0; i < vertices.size(); ++i)
 					{
 						g2.drawLine(250 + correctionX + (int)scaleX *(int) vertices.get(i).getX(),
