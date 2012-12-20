@@ -24,7 +24,6 @@ public class Population {
 	/** Number of generation */
 	private int generationNumber = 0;
 	
-	private int bestEntityindex = -1;
 	/**
 	 * C-tor, creates first population entities
 	 * 

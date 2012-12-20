@@ -2,6 +2,8 @@ package pl.edu.pw.elka.pszt;
 
 
 
+import java.util.Vector;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
@@ -22,7 +24,8 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception // Don't ask :P
 	{
-		double[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
+		
+		/*double[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
 		double[][] bigSquarePoints = { { 0, 6 }, { 3, 6 }, { 3, 3 }, { 0, 3 } };
 		double[][] smallSquarePoints = { { 1, 3 }, { 3, 3 }, { 3, 1 }, { 1, 1 } };
 		double[][] smallSquarePoints1 = { { 1, -3 }, { 3, -3 }, { 3, 1 }, { 1, 1 } };
@@ -32,27 +35,29 @@ public class Main {
 		Segment triangleSegment = new Segment(trianglePoints);
 		Segment bigSquareSegment = new Segment(bigSquarePoints);
 		Segment smallSquareSegment = new Segment(smallSquarePoints);
-
+		
 		MultiSegment multiSegment = new MultiSegment();
 		multiSegment.addSegment(triangleSegment);
 		multiSegment.addSegment(bigSquareSegment);
 		multiSegment.addSegment(smallSquareSegment);
 		multiSegment.addSegment(new Segment(smallSquarePoints1));
 		multiSegment.addSegment(new Segment(smallSquarePoints2));
-		multiSegment.addSegment(new Segment(smallSquarePoints3));
-
-		/*MultiSegment multiSegment = new MultiSegment();
+		multiSegment.addSegment(new Segment(smallSquarePoints3));*/
+		
+		
+		MultiSegment multiSegment = new MultiSegment();
 		 multiSegment.addSegment(new Segment(new double[][] {{77,1},{102,40},{61,67},{35,24}}));
-         multiSegment.addSegment(new Segment(new double[][] {{8,66},{104,67},{105,163}}));
-         multiSegment.addSegment(new Segment(new double[][] {{107,67},{154,116},{154,163},{105,116}}));
+         multiSegment.addSegment(new Segment(new double[][] {{8,66},{154,67},{105,163}}));
+         multiSegment.addSegment(new Segment(new double[][] {{154,67},{201,116},{201,163},{154,116}}));
          multiSegment.addSegment(new Segment(new double[][] {{49,107},{144,205},{49,205}}));
          multiSegment.addSegment(new Segment(new double[][] {{131,191},{180,191},{179,239}}));
          multiSegment.addSegment(new Segment(new double[][] {{0,211,},{49,163},{48,258}}));
-         multiSegment.addSegment(new Segment(new double[][] {{49,241},{82,273},{49,308}}));*/
-         new Painter(multiSegment);
+         multiSegment.addSegment(new Segment(new double[][] {{49,241},{82,273},{49,308}}));
+         new Painter(new Entity(multiSegment), "Target Tangram");
          Population p = new Population(multiSegment);
 		
-		
+		Vector<Painter> painters = new Vector<Painter>();
+		Statistics statistics = new Statistics();
 		int a = 0;
 		double best = 0;
 		double last = 0;
@@ -63,10 +68,11 @@ public class Main {
 			generationNumber++;
 			a++;
 			Entity adapt = p.nextGeneration();
-			new Painter(adapt);
+			painters.add(new Painter(adapt, "Generacja " + p.getGenerationNumber()));
+			if(painters.size() >= 2) painters.get(painters.size() -2).setVisible(false);
 			System.out.println(p.getGenerationNumber());
 			System.out.println(adapt.getAdaptationSize());
-			
+			statistics.addAdaptation(adapt.getAdaptationSize());
 			last = adapt.getAdaptationSize();
 			if (last > best) 
 			{
@@ -83,8 +89,9 @@ public class Main {
 			if (adapt.getAdaptationSize() > condition)
 			{
 				System.out.println(adapt);
-				new Painter(adapt);
+				new Painter(adapt, "Generacja " + p.getGenerationNumber());
 				System.out.println("Adaptacja " + adapt.getAdaptationSize() + " w " + p.getGenerationNumber() + " generacji");
+				statistics.showResults(p.getGenerationNumber());
 				break;
 			}
 			if(generationNumber == 0)
