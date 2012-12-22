@@ -1,7 +1,7 @@
 package pl.edu.pw.elka.pszt;
 
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -27,9 +27,11 @@ public class Reader {
 		Scanner in = null;
 		try 
 		{
-			 in = new Scanner(new File("src" + System.getProperty("file.separator") + s));
+			 
+			 in = new Scanner(this.getClass().getResourceAsStream(s));
+			 
 			 Vector<Double> XCoords = new Vector<Double>();
-			Vector<Double> YCoords = new Vector<Double>();
+			 Vector<Double> YCoords = new Vector<Double>();
 			
 			 while(in.hasNext())
 			 {
@@ -59,11 +61,15 @@ public class Reader {
 				 }			 
 			 }
 		} 
-		catch (Exception e) 
+		catch (FileNotFoundException e) 
 		{
 			System.err.println("OPERACJA NIEDOZWOLONA");
 			e.printStackTrace();
 			return null;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 		finally 
 		{

@@ -29,6 +29,7 @@ public class Painter extends JFrame {
 	public Painter(Entity entity, Entity multiEntity, String s)
 	{
 		super(s);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setBounds(0,0,(int)dim.getWidth(),(int)dim.getHeight());
 		this.setVisible(true);

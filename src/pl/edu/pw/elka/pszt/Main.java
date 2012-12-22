@@ -27,7 +27,11 @@ public class Main {
 	public static void main(String[] args) throws Exception // Don't ask :P
 	{	
 		Reader reader = new Reader();
-		MultiSegment multiSegment = reader.read("generation2.txt");
+		MultiSegment multiSegment;
+		if(args.length < 1) 
+			multiSegment = reader.read("generation1.txt");
+		else
+			multiSegment = reader.read(args[0]);
         new Painter(new Entity(multiSegment), new Entity(multiSegment), "Target Tangram");
         Population p = new Population(multiSegment);
 		
