@@ -11,7 +11,9 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * Representation of one tangram segment polygon with id identifying it
  * 
- * @author Kajo
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
  */
 public class Segment {
 

@@ -12,12 +12,18 @@ import java.awt.geom.Ellipse2D;
 import java.text.DecimalFormat;
 import java.util.Vector;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.vividsolutions.jts.geom.Coordinate;
+
+/*
+ * Class that is used to show statistics after multiple generations
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
+ */
 
 @SuppressWarnings("serial")
 public class Statistics extends JFrame{
@@ -83,14 +89,13 @@ public class Statistics extends JFrame{
 			Graphics2D g2 = (Graphics2D) g;
 			for(int i = 0; i<adapt.size()-1; ++i)
 			{
-				System.out.println("A TU TO " + adapt.get(i).y);
 				g2.drawLine((int)adapt.get(i).x, (int)(dim.getHeight() - adapt.get(i).y - 200),
 							(int)adapt.get(i+1).x, (int)(dim.getHeight() - adapt.get(i+1).y - 200));
-				circle = new Ellipse2D.Float((int) adapt.get(i).x -3, (int)(dim.getHeight() - adapt.get(i).y - 203) -3, 6.0f,6.0f);
+				circle = new Ellipse2D.Float((int) adapt.get(i).x -3, (int)(dim.getHeight() - adapt.get(i).y - 200) -3, 6.0f,6.0f);
 				g2.draw(circle);
 			}
 			circle = new Ellipse2D.Float((int) adapt.get(adapt.size()-1).x - 3, 
-										(int)(dim.getHeight() - adapt.get(adapt.size()-1).y -200), 6.0f,6.0f);
+										(int)(dim.getHeight() - adapt.get(adapt.size()-1).y -200) -3, 6.0f,6.0f);
 			g2.draw(circle);
 			float dash[] = {10.0f};
 			BasicStroke dashed = new BasicStroke(1.0f,

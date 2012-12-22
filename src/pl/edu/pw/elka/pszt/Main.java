@@ -2,7 +2,6 @@ package pl.edu.pw.elka.pszt;
 
 
 
-import java.util.Calendar;
 import java.util.Vector;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -13,7 +12,9 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * Main app class
  * 
- * @author Kajo
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
  */
 public class Main {
 
@@ -24,37 +25,11 @@ public class Main {
 	 *             // Don't ask :P
 	 */
 	public static void main(String[] args) throws Exception // Don't ask :P
-	{
-		
-		/*double[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
-		double[][] bigSquarePoints = { { 0, 6 }, { 3, 6 }, { 3, 3 }, { 0, 3 } };
-		double[][] smallSquarePoints = { { 1, 3 }, { 3, 3 }, { 3, 1 }, { 1, 1 } };
-		double[][] smallSquarePoints1 = { { 1, -3 }, { 3, -3 }, { 3, 1 }, { 1, 1 } };
-		double[][] smallSquarePoints2 = { { 1, -3 }, { 3, -3 }, { 3, -5 }, { 1, -5 } };
-		double[][] smallSquarePoints3 = { { -1, -7 }, { 4, -8 }, { 3, -5 }, { 1, -5 } };
-
-		Segment triangleSegment = new Segment(trianglePoints);
-		Segment bigSquareSegment = new Segment(bigSquarePoints);
-		Segment smallSquareSegment = new Segment(smallSquarePoints);
-		
-		MultiSegment multiSegment = new MultiSegment();
-		multiSegment.addSegment(triangleSegment);
-		multiSegment.addSegment(bigSquareSegment);
-		multiSegment.addSegment(smallSquareSegment);
-		multiSegment.addSegment(new Segment(smallSquarePoints1));
-		multiSegment.addSegment(new Segment(smallSquarePoints2));
-		multiSegment.addSegment(new Segment(smallSquarePoints3));*/
-		
-		MultiSegment multiSegment = new MultiSegment();
-		 multiSegment.addSegment(new Segment(new double[][] {{77,1},{102,40},{61,67},{35,24}}));
-         multiSegment.addSegment(new Segment(new double[][] {{8,66},{154,67},{105,163}}));
-         multiSegment.addSegment(new Segment(new double[][] {{154,67},{201,116},{201,163},{154,116}}));
-         multiSegment.addSegment(new Segment(new double[][] {{49,107},{144,205},{49,205}}));
-         multiSegment.addSegment(new Segment(new double[][] {{131,191},{180,191},{179,239}}));
-         multiSegment.addSegment(new Segment(new double[][] {{0,211,},{49,163},{48,258}}));
-         multiSegment.addSegment(new Segment(new double[][] {{49,241},{82,273},{49,308}}));
-         new Painter(new Entity(multiSegment), new Entity(multiSegment), "Target Tangram");
-         Population p = new Population(multiSegment);
+	{	
+		Reader reader = new Reader();
+		MultiSegment multiSegment = reader.read("generation2.txt");
+        new Painter(new Entity(multiSegment), new Entity(multiSegment), "Target Tangram");
+        Population p = new Population(multiSegment);
 		
 		Vector<Painter> painters = new Vector<Painter>();
 		Statistics statistics = new Statistics(p);

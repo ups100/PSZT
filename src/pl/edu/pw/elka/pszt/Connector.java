@@ -5,7 +5,9 @@ package pl.edu.pw.elka.pszt;
 /**
  * Class representing connection between, vertices of tangram element and target big one element
  * 
- * @author Kajo
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
  */
 public class Connector {
 

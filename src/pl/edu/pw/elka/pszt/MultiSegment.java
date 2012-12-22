@@ -11,7 +11,9 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * Class containing representation of app model such as segments and target segment made of small tangram segments
  * 
- * @author Kajo
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
  */
 public class MultiSegment {
 

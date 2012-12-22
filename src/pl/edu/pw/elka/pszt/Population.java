@@ -8,7 +8,9 @@ import java.util.Vector;
 /**
  * Represents population -> some entities
  * 
- * @author Kajo
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
  */
 public class Population {
 

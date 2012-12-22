@@ -1,0 +1,39 @@
+/*double[][] trianglePoints = { { 0, 6 }, { 3, 9 }, { 3, 6 } };
+		double[][] bigSquarePoints = { { 0, 6 }, { 3, 6 }, { 3, 3 }, { 0, 3 } };
+		double[][] smallSquarePoints = { { 1, 3 }, { 3, 3 }, { 3, 1 }, { 1, 1 } };
+		double[][] smallSquarePoints1 = { { 1, -3 }, { 3, -3 }, { 3, 1 }, { 1, 1 } };
+		double[][] smallSquarePoints2 = { { 1, -3 }, { 3, -3 }, { 3, -5 }, { 1, -5 } };
+		double[][] smallSquarePoints3 = { { -1, -7 }, { 4, -8 }, { 3, -5 }, { 1, -5 } };
+
+0 , 6
+3 , 6
+3 , 3
+0 , 3
+
+END
+
+1 , 3
+3 , 3
+3 , 1
+1 , 1
+
+END
+
+1 , -3
+3 , -3
+3 , 1
+1 , 1
+
+END
+
+1 , -3
+3 , -3
+3 , -5
+1 , -5
+
+END
+
+-1 , -7
+4 , -8
+3 , -5
+1 , -5

@@ -7,7 +7,9 @@ import java.util.Random;
 /**
  * Represents entity made of connectors and segments as well
  * 
- * @author Kajo
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
  */
 public class Entity implements Comparable<Entity> {
 

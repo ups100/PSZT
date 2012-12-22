@@ -1,0 +1,17 @@
+Each point should be written like this:
+25 , 57 
+where 25 is the X coordinate and 57 is the Y coordinate. Space beetween 
+coordinates and semicolon is obligatory.
+
+When all the segmenents point are written, there should be a "END" text.
+Then the next segment may be written. Example:
+
+45 , 76
+46 , 435
+45 , 123
+
+END   /*End of segment*/
+46 , 64 /*Beginning of the new Segment*/
+
+There should be at least three points in each segment
+

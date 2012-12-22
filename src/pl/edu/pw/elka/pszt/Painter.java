@@ -6,16 +6,22 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/*
+ * Class that is used to to show the results of each generation
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
+ */
 
 @SuppressWarnings("serial")
 public class Painter extends JFrame {
 	
+	private static final boolean CONTOURS = true;
 	public static double X = 500;
 	public static double Y = 500;
 
@@ -127,24 +133,25 @@ public class Painter extends JFrame {
 				if(scaleY < 1) scaleY = 1;
 				int correctionX = moveX>=0 ? 0 : moveX;
 				int correctionY = moveY>=0 ? 0 : moveY;
-
-				for (Segment segment : multiSegments)
+				if(CONTOURS) 
 				{
-					float dash[] = {10.0f};
-					BasicStroke dashed = new BasicStroke(1.0f,
-		                    BasicStroke.CAP_BUTT,
-		                    BasicStroke.JOIN_MITER, 10.0f,dash,0.0f);
-
-					g2.setStroke(dashed);
-					ArrayList<Vertex> multiVertices = segment.getVertices();
-					for (int i = 0; i < multiVertices.size(); ++i)
+					for (Segment segment : multiSegments)
 					{
-						g2.drawLine(250 + correctionX + (int)scaleX *(int) multiVertices.get(i).getX(),
-									250 + correctionY + (int)scaleY *(int) multiVertices.get(i).getY(),
-									250 + correctionX + (int)scaleX *(int) multiVertices.get((i + 1) % multiVertices.size()).getX(),
-									250 + correctionY + (int)scaleY *(int) multiVertices.get((i + 1) % multiVertices.size()).getY());
-					}
-					
+						float dash[] = {10.0f};
+						BasicStroke dashed = new BasicStroke(1.0f,
+								BasicStroke.CAP_BUTT,
+								BasicStroke.JOIN_MITER, 10.0f,dash,0.0f);
+
+						g2.setStroke(dashed);
+						ArrayList<Vertex> multiVertices = segment.getVertices();
+						for (int i = 0; i < multiVertices.size(); ++i)
+						{
+							g2.drawLine(250 + correctionX + (int)scaleX *(int) multiVertices.get(i).getX(),
+										250 + correctionY + (int)scaleY *(int) multiVertices.get(i).getY(),
+										250 + correctionX + (int)scaleX *(int) multiVertices.get((i + 1) % multiVertices.size()).getX(),
+										250 + correctionY + (int)scaleY *(int) multiVertices.get((i + 1) % multiVertices.size()).getY());
+						}				
+					}	
 				}
 				
 				for (Segment segment : segments)

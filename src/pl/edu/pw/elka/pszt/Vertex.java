@@ -5,7 +5,9 @@ import com.vividsolutions.jts.geom.Coordinate;
 /**
  * Vertex representation with id identifying it
  * 
- * @author Kajo
+ * @author Marcin Kubik
+ * @author Mikołaj Markiewicz
+ * @author Krzysztof Opasiak
  */
 public class Vertex {
 
