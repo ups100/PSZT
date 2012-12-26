@@ -28,9 +28,20 @@ import com.vividsolutions.jts.geom.Coordinate;
 @SuppressWarnings("serial")
 public class Statistics extends JFrame{
 
+	/** Vector of adaptations */
 	private final Vector<Double> adaptations;
+	
+	/** Population that is represented by the statistics */
 	private final Population p;
+	
+	/** For some measurements */
 	double time;
+	
+	/**
+	 * c-tor
+	 * Starts counting, how much time has passed
+	 * @param p First population
+	 */
 	public Statistics(Population p)
 	{
 		super("Statistics");
@@ -42,11 +53,19 @@ public class Statistics extends JFrame{
 		this.time = (double)System.currentTimeMillis();
 	}
 	
+	/**
+	 * Adds new adaptations to vector of adaptations
+	 * @param a adaptation (from 0 do 1)
+	 */
 	public void addAdaptation(double a)
 	{
 		adaptations.add(a);
 	}
 	
+	/**
+	 * Used to show Frame with results, such as time, number of generations etc
+	 * @param p Last Generation
+	 */
 	public void showResults(Population p) 
 	{
 		this.setTitle("Sequence reached in " + p.getGenerationNumber()+" generation ");
@@ -65,6 +84,12 @@ public class Statistics extends JFrame{
 		this.setVisible(true);
 		
 	}
+	
+	/**
+	 * Adds three panels with informations
+	 * @param adapt vector of coordinates used to paint
+	 * @param time how much time did it take to solve tangram
+	 */
 	public void paintGraph(final Vector<Coordinate> adapt, double time)
 	{
 		this.add(new MyPanel(adapt), BorderLayout.CENTER);	
@@ -72,15 +97,27 @@ public class Statistics extends JFrame{
 		this.add(new DownInformation(this), BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * Adds panel with graph
+	 * @author Marcin Kubik
+	 * @author Mikołaj Markiewicz
+	 * @author Krzysztof Opasiak
+	 */
 	private class MyPanel extends JPanel 
 	{
 		Vector<Coordinate> adapt;
+		
+		/**
+		 * Creates panel with graph
+		 * @param adapt vector of coordinates
+		 */
 		public MyPanel(final Vector<Coordinate> adapt)
 		{
 			this.setBackground(Color.WHITE);
 			this.adapt = adapt;
 			setVisible(true);
 		}
+		
 		public void paintComponent(Graphics g) 
 		{
 			this.setBackground(Color.WHITE);
@@ -110,6 +147,12 @@ public class Statistics extends JFrame{
 		}
 	}
 	
+	/**
+	 * Adds panel with statistic informations
+	 * @author Marcin Kubik
+	 * @author Mikołaj Markiewicz
+	 * @author Krzysztof Opasiak
+	 */
 	private class UpInformation extends JPanel
 	{
 		
@@ -137,6 +180,13 @@ public class Statistics extends JFrame{
 			
 		}
 	}
+	
+	/**
+	 * Adds panel with all adaptations
+	 * @author Marcin Kubik
+	 * @author Mikołaj Markiewicz
+	 * @author Krzysztof Opasiak
+	 */
 	private class DownInformation extends JPanel
 	{
 		public DownInformation(Statistics s)
@@ -153,7 +203,7 @@ public class Statistics extends JFrame{
 		}
 		public void paintComponent(Graphics g)
 		{
-			
+			//Nothing to do here
 		}
 	}
 }

@@ -62,23 +62,19 @@ public class Population {
 	}
 
 	/**
-	 * Make next generation by coitus, mutation and natural selection
+	 * Make next generation by copulateThem, mutation and natural selection
 	 * @return Best adapted entity
 	 */
 	public Entity nextGeneration()
 	{
 		this.generationNumber++;
 		mutator++;
+		
 		/**
 		 * Choose entities from population to copulate them
 		 */
 		ArrayList<Entity> evolvingEntities = getRandomEntitiesFromPopulation();
 
-		/** 
-		 * Maybe some other variable will be useful but by now
-		 * I will just set the result of copulation to the existing
-		 * evolvingEntities variable
-		 */
 		ArrayList<Entity> children = copulateEntities(evolvingEntities);
 
 		/**
@@ -132,16 +128,10 @@ public class Population {
 	}
 
 	/**
-	 * Append new entities to population There is a need to change from public
-	 * to private (I guess so)
+	 * Append new entities to population 
 	 */
-	public ArrayList<Entity> copulateEntities(ArrayList<Entity> evolvingEntities)
+	private ArrayList<Entity> copulateEntities(ArrayList<Entity> evolvingEntities)
 	{
-		/** Size of afterCopulationList is size of evolvingEntities ^ 2 
-		 * I don't know if it is right (or especially fast) but it is very hippie-style
-		 * everyone with everyone
-		 * It can be easily changed
-		 * */
 		ArrayList<Entity> afterCopulationList = new ArrayList<Entity>();
 		for(int i = 0; i < evolvingEntities.size(); ++i)
 		{
@@ -204,6 +194,10 @@ public class Population {
 		return this.entities.get(max);
 	}
 
+	/**
+	 * Mutates population if next generations aren't better
+	 * and the adaptation does not increase
+	 */
 	public void mutateRandomly()
 	{	
 		int maxIndex = -1;
@@ -237,6 +231,9 @@ public class Population {
 		return this.generationNumber;
 	}
 
+	/**
+	 * Used to get information about the population
+	 */
 	public String toString() 
 	{
 		StringBuilder str = new StringBuilder();
@@ -249,7 +246,10 @@ public class Population {
 		
 		return str.toString();
 	}
-
+	
+	/**
+	 * Allows to mutate each entity independently
+	 */
 	public void mutateThem() 
 	{
 		for (Entity e : this.entities) 
@@ -258,11 +258,19 @@ public class Population {
 		}	
 	}
 	
+	/**
+	 * Getter for all entities in population
+	 * @return ArrayList of entities
+	 */
 	public ArrayList<Entity> getEntities()
 	{
 		return this.entities;
 	}
 	
+	/**
+	 * Getter for the reference to MultiSegment
+	 * @return Multisegment
+	 */
 	public MultiSegment getMultiSegment()
 	{
 		return this.targetSegment;

@@ -165,38 +165,19 @@ public class Segment {
 		return minY;
 	}
 
-	/**
-	 * Align vertices to top left corner by removing minimum of X and Y coordinate
-	 * 
-	 * @return Aligned clone of segment
-	 * @deprecated not used
-	 */
-	public Segment getAlignedClone()
-	{
-		Segment clone = this.clone();
 
-		double minX = this.getMinX();
-		double minY = this.getMinY();
-
-		clone.moveBy(-minX, -minY);
-
-		return clone;
-	}
 
 	/**
 	 * Clone this segment, by making union with itself
 	 * Copy id from old one to new one
-	 * 
 	 * @return Cloned segment with same id
 	 */
-	@Override
 	public Segment clone()
 	{
 		try
 		{
 			Segment segment = new Segment(this.getVertices());
 			segment.setId(this.getId());
-
 			return segment;
 		}
 		catch (Exception e)
@@ -204,7 +185,6 @@ public class Segment {
 			System.err.println("Segment cloning exception.");
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 

@@ -19,15 +19,10 @@ public class Entity implements Comparable<Entity> {
 	/** In which generation he/she/it has been born */
 	private int bornGeneration;
 
-	/*
-	 * Optimization get
-	 */
 	/** Area which entity covers target multi segment */
 	private double coveredArea = -1;
 
-	/*
-	 * Just for debug information
-	 */
+
 	/** Area of overlapping segments in entity */
 	private double overlapArea = -1;
 
@@ -36,9 +31,7 @@ public class Entity implements Comparable<Entity> {
 
 	public static int i = 0;
 	public int id = i++;
-	/*
-	 * End of debug info declaration
-	 */
+
 	
 	/**
 	 * C-tor
@@ -48,8 +41,7 @@ public class Entity implements Comparable<Entity> {
 	 */
 	public Entity(final int generation)
 	{
-		this.bornGeneration = generation;
-		
+		this.bornGeneration = generation;		
 	}
 
 	/**
@@ -63,22 +55,19 @@ public class Entity implements Comparable<Entity> {
 
 	/**
 	 * Add connector between segment, vertex from segment and vertex from target segment to the entity
-	 * 
 	 * @param connector Specified connector
 	 */
 	public void addConnector(final Connector connector)
 	{
 		this.connectors.add(connector);
 
-		// Some optimization, that entity has changed
 		this.coveredArea = -1;
 	}
 	
 	/**
-	 * 
-	 * @param other "Father" in a relationship (this is mother!)
-	 * @return baby entity
-	 * @brief separator is a decision what is taken from mother
+	 * Creates new baby from parents "this" and "other"
+	 * @param other "Father" in a relationship ("this" is mother)
+	 * @return new Entity that represents the baby
 	 */
 	public Entity copulateWith(final Entity other, int copulateGeneration)
 	{
@@ -132,27 +121,18 @@ public class Entity implements Comparable<Entity> {
 					baby.addConnector(this.connectors.get(i).clone());
 					fromThis++;
 				}
-			}
-			
-		}
-	
+			}			
+		}	
 		return baby;
 	}
 
 
 
 	/**
-	 * Mutate entity
+	 * Mutates entity, randomly changing the vertexes
 	 */
 	public void mutateEntity()
 	{
-		
-		// Access to necessary segments inside connectors
-		/**
-		 * Decision: Just one connection is mutated
-		 * It can be simple changed to be allowed for more than one
-		 * but this means loops, draw without returning and other weird stuff
-		 */
 		Random generator = new Random();
 		
 		// Choose connector to mutate
@@ -183,14 +163,11 @@ public class Entity implements Comparable<Entity> {
 
 	/**
 	 * Adaptation function, check how much entity covers target entity
-	 * 
 	 * @return Number in range -1 : 1, represents percentage of covering
-	 * 					negative value if overlap a lot without cover anything of target
 	 */
 	public double getAdaptationSize()
-	{
-		
-		// If already computed
+	{		
+		// If already computed 
 		if (this.coveredArea < 0)
 			calculateAdaptation();
 
@@ -199,10 +176,6 @@ public class Entity implements Comparable<Entity> {
 
 	/**
 	 * Calculates intersection between entity and target segment
-	 * and set fields with gather information such as
-	 * 	- overlapping area
-	 *  - cover area
-	 *  - target area
 	 */
 	private void calculateAdaptation()
 	{
@@ -223,8 +196,7 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * Set overlapping area size
-	 * 
+	 * Setter for the overlap area
 	 * @param overlapArea overlap area size
 	 */
 	public void setOverlapArea(final double overlapArea)
@@ -233,8 +205,7 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * Get overlapping area
-	 * 
+	 * Getter for the Overlap Area
 	 * @return Overlapping area size
 	 */
 	public double getOverlapArea()
@@ -243,8 +214,7 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * Set size of source area covers target area
-	 * 
+	 * Setter for the Covered Area
 	 * @param coveredArea Cover area
 	 */
 	public void setCoveredArea(final double coveredArea)
@@ -253,8 +223,8 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * Get size as source covers target area
-	 * @return
+	 * Getter for the covered area
+	 * @return Covered Area 
 	 */
 	public double getCoveredArea()
 	{
@@ -262,8 +232,7 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * Set target segment area
-	 * 
+	 * Setter for the target area
 	 * @param targetArea Target segment area
 	 */
 	public void setTargetArea(final double targetArea)
@@ -272,8 +241,7 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * Get target segment area
-	 * 
+	 * Getter for the target area
 	 * @return Target segment area
 	 */
 	public double getTargetArea()
@@ -282,8 +250,7 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * Get entity born generation
-	 * 
+	 * Function that tells, in which generation the entity was born
 	 * @return Number of generation in which has been born
 	 */
 	public int getBornGeneration()
@@ -291,13 +258,16 @@ public class Entity implements Comparable<Entity> {
 		return this.bornGeneration;
 	}
 
+	/**
+	 * Allows to get all connectors
+	 * @return List of connectors of particular entity
+	 */
 	public ArrayList<Connector> getConnectors()
 	{
 		return this.connectors;
 	}
 	/**
-	 * Get information about entity
-	 * 
+	 * Allows to invoke println on he object 
 	 * @return Entity information
 	 */
 	public String toString()
@@ -308,9 +278,9 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * 
-	 * @param other
-	 * @return
+	 * Function used to compare two entities
+	 * @param other the other entity that we want to compare to
+	 * @return value represents the difference beetween entities
 	 */
 	public int compareTo(Entity other)
 	{
@@ -319,8 +289,8 @@ public class Entity implements Comparable<Entity> {
 	}
 
 	/**
-	 * To paint it
-	 * @return
+	 * Function that return list of segments of the entity
+	 * @return ArrayList of Segments
 	 */
 	public ArrayList<Segment> getSegments()
 	{
@@ -331,5 +301,4 @@ public class Entity implements Comparable<Entity> {
 
 		return segments;
 	}
-
 }

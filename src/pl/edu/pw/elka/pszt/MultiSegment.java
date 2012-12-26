@@ -92,7 +92,6 @@ public class MultiSegment {
 	 */
 	public Vertex getRandomVertex()
 	{
-		// TODO maybe put 'except' those numbers or sth like that, depends of algorithm
 		return this.vertices.get(new Random().nextInt(this.vertices.size()));
 	}
 
@@ -127,7 +126,6 @@ public class MultiSegment {
 
 	/**
 	 * Calculate intersection area of this and given one
-	 * 
 	 * @param other Multi segment to check with
 	 * @return intersection area
 	 * @return array of sum of intersection source with target, source overlapping area, target covering area
@@ -201,7 +199,10 @@ public class MultiSegment {
 		return this.overlapArea;
 	}
 
-
+	/**
+	 * Getter for the Min X
+	 * @return Min X
+	 */
 	public double getMinX()
 	{
 		double bestX = 99999;
@@ -213,6 +214,10 @@ public class MultiSegment {
 		return bestX;
 	}
 	
+	/**
+	 * Getter for the Min Y
+	 * @return Min Y
+	 */
 	public double getMinY()
 	{
 		double bestY = 9999;
@@ -224,6 +229,10 @@ public class MultiSegment {
 		return bestY;
 	}
 	
+	/**
+	 * Getter for the Max X
+	 * @return Max X
+	 */
 	public double getMaxX()
 	{
 		double bestX = -9999;
@@ -235,6 +244,10 @@ public class MultiSegment {
 		return bestX;
 	}
 	
+	/**
+	 * Getter for the Max Y
+	 * @return Max Y
+	 */
 	public double getMaxY()
 	{
 		double bestY = -9999;
@@ -245,6 +258,7 @@ public class MultiSegment {
 		}
 		return bestY;
 	}
+	
 	/**
 	 * Get information about segments building target segment
 	 * 

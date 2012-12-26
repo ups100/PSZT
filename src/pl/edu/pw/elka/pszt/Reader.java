@@ -14,22 +14,28 @@ import java.util.Vector;
  */
 public class Reader {
 
-	
+	/**
+	 * c-tor 
+	 * As long as class has no variables, nothing should be done in c-tor
+	 */
 	public Reader()
 	{
 		
 	}
 	
+	/**
+	 * Gets the informations about the tangram from a file
+	 * @param s Name of the filename
+	 * @return Created multi segment
+	 */
 	public MultiSegment read(String s)
 	{
 		MultiSegment multiSegment = new MultiSegment();
 		
 		Scanner in = null;
 		try 
-		{
-			 
-			 in = new Scanner(this.getClass().getResourceAsStream(s));
-			 
+		{		 
+			 in = new Scanner(this.getClass().getResourceAsStream(s));			 
 			 Vector<Double> XCoords = new Vector<Double>();
 			 Vector<Double> YCoords = new Vector<Double>();
 			
@@ -63,7 +69,7 @@ public class Reader {
 		} 
 		catch (FileNotFoundException e) 
 		{
-			System.err.println("OPERACJA NIEDOZWOLONA");
+			System.err.println("Something went wrong");
 			e.printStackTrace();
 			return null;
 		}

@@ -25,7 +25,6 @@ public class Painter extends JFrame {
 	public static double X = 500;
 	public static double Y = 500;
 
-	
 	public Painter(Entity entity, Entity multiEntity, String s)
 	{
 		super(s);
