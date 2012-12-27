@@ -124,7 +124,6 @@ public class Painter extends JFrame {
 				this.setBackground(Color.white);
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
-				//int scale = 20;
 				double scaleX = 1/sX;
 				double scaleY = 1/sY;
 				scaleX = scaleX/4;
@@ -162,7 +161,7 @@ public class Painter extends JFrame {
 					int blue = random.nextInt(256);
 
 					g2.setColor(new Color(red, green, blue));
-					g2.setStroke(new BasicStroke(10));
+					g2.setStroke(new BasicStroke(5));
 					ArrayList<Vertex> vertices = segment.getVertices();
 					for (int i = 0; i < vertices.size(); ++i)
 					{

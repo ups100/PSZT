@@ -35,7 +35,7 @@ public class Reader {
 		Scanner in = null;
 		try 
 		{		 
-			 in = new Scanner(this.getClass().getResourceAsStream(s));			 
+			 in = new Scanner(this.getClass().getResourceAsStream(s+".txt"));			 
 			 Vector<Double> XCoords = new Vector<Double>();
 			 Vector<Double> YCoords = new Vector<Double>();
 			

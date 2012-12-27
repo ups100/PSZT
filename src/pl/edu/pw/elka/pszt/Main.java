@@ -15,7 +15,7 @@ import java.util.Vector;
 public class Main {
 
 	/**
-	 * @brief main function that tries to solve tangram
+	 * main function that tries to solve tangram
 	 * @param args name of file, that contains tangram to make            
 	 */
 	public static void main(String[] args)
@@ -23,7 +23,7 @@ public class Main {
 		Reader reader = new Reader();
 		MultiSegment multiSegment;
 		if(args.length < 1) 
-			multiSegment = reader.read("generation1.txt");
+			multiSegment = reader.read("generation1");
 		else
 			multiSegment = reader.read(args[0]);
         new Painter(new Entity(multiSegment), new Entity(multiSegment), "Target Tangram");
