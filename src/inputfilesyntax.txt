@@ -14,4 +14,4 @@ END   /*End of segment*/
 46 , 64 /*Beginning of the new Segment*/
 
 There should be at least three points in each segment
-
+File should also end with word END

@@ -22,16 +22,29 @@ public class Main {
 	{	
 		Reader reader = new Reader();
 		MultiSegment multiSegment;
-		if(args.length < 1) 
-			multiSegment = reader.read("generation1");
-		else
+		double condition;
+		if (args.length == 1) 
+		{
 			multiSegment = reader.read(args[0]);
+			condition = 0.99;
+		}
+		else if (args.length == 2)
+		{
+			multiSegment = reader.read(args[0]);
+			condition = Double.parseDouble(args[1]);
+		}
+		else
+		{
+			multiSegment = reader.read("generation1");
+			condition = 0.99;
+		}
+			
         new Painter(new Entity(multiSegment), new Entity(multiSegment), "Target Tangram");
         Population p = new Population(multiSegment);
 		
 		Vector<Painter> painters = new Vector<Painter>();
 		Statistics statistics = new Statistics(p);
-		double condition = 0.99;
+		
 		int generationNumber = 0;
 		while(true)
 		{
