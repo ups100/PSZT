@@ -70,25 +70,16 @@ public class Entity implements Comparable<Entity> {
 	 * @return new Entity that represents the baby
 	 */
 	public Entity copulateWith(final Entity other, int copulateGeneration) {
-//		return copulateWith2(other, copulateGeneration);
 		Entity baby = new Entity(copulateGeneration + 1);
 		Random generator = new Random();
 		
 		int numberDifferent = 0;
 		for(int i = 0; i < connectors.size(); ++i) {
 			int j = i;
-			//look for that same segment
 			if(connectors.get(i).getSegment().getId() 
 					!= other.connectors.get(i).getSegment().getId()) {
-				System.out.println("DUPA");
 			}
-//				for(j = 0; j < other.connectors.size(); ++j) {
-//					if(connectors.get(i).getSegment().getId() 
-//					== other.connectors.get(j).getSegment().getId()) break;
-//				}
-//			}
-			
-			//count different connections
+
 			if((connectors.get(i).getSegmentVertex().getId() 
 					!=other.connectors.get(j).getSegmentVertex().getId()) 
 					|| 
@@ -101,19 +92,7 @@ public class Entity implements Comparable<Entity> {
 		int numberTakenFromThis;
 		int numberTakenFromOther;
 
-		double max = Math.max(this.getAdaptationSize(),
-				other.getAdaptationSize());
-		double min = Math.min(this.getAdaptationSize(),
-				other.getAdaptationSize());
 		
-//		if (this.getAdaptationSize() > other.getAdaptationSize()) {
-//			numberTakenFromThis = (int) ((double) numberDifferent * 0.5 * (min / max));
-//			numberTakenFromOther = numberDifferent - numberTakenFromThis;
-//
-//		} else {
-//			numberTakenFromOther = (int) ((double) numberDifferent * 0.5 * (min / max));
-//			numberTakenFromThis = numberDifferent - numberTakenFromOther;
-//		}
 		if (this.getAdaptationSize() > other.getAdaptationSize()) {
 			numberTakenFromThis = numberDifferent - numberDifferent/2;
 			numberTakenFromOther = numberDifferent/2;
@@ -165,41 +144,7 @@ public class Entity implements Comparable<Entity> {
 			
 		}
 		return baby;
-	}
-
-	public Entity copulateWith2(final Entity other, int copulateGeneration) {
-		Entity baby = new Entity(copulateGeneration + 1);
-		
-		for (int i = 0; i < this.connectors.size(); ++i) {
-			Connector con1 = connectors.get(i);
-			Connector con2 = other.connectors.get(i);
-			
-			int newVertexID = con1.getSegmentVertex().getId() + con2.getSegmentVertex().getId();
-			newVertexID = (int)(newVertexID*0.5 );
-			
-			int newTargetID = con1.getTargetSegmentVertex().getId() + con2.getTargetSegmentVertex().getId();
-			newTargetID = (int)(newTargetID*0.5 );
-			
-			Connector result = connectors.get(i).clone();
-			
-			Segment s = result.getSegment();
-			Vertex sVertex = s.getVertexById(newVertexID);
-			Vertex target = con1.getTargetSegment().getVertexById(newTargetID);
-			
-			if(sVertex == null) System.out.println("Source null");
-			if(target == null) System.out.println("target null");
-			
-			result.setSegmentVertex(sVertex);
-			
-			result.setTargetSegmentVertex(target);
-			
-			s.moveToVertexByVertex(target, sVertex);
-			baby.addConnector(result);
-			
-		}
-		
-		return baby;
-	}
+	}	
 	
 	/**
 	 * Mutates entity, randomly changing the vertexes
@@ -210,40 +155,28 @@ public class Entity implements Comparable<Entity> {
 		int mutationStrenght = generator.nextInt(1) +1;
 		
 		while (mutationStrenght > 0) {
-			// Choose connector to mutate
 			int connectorId = generator.nextInt(this.connectors.size());
 			Connector connectorToMutate = this.connectors.get(connectorId);
 
-			// Get its segment
 			Segment segmentToMove = connectorToMutate.getSegment();
 
-			// Choose vertex to move segment by
 			Vertex segmentVertex = segmentToMove.getRandomVertex();
-			// Set new segment vertex in connector
+
 			connectorToMutate.setSegmentVertex(segmentVertex);
 			
 			Vertex targetSegmentVertex;
 			if(generator.nextBoolean()) {
-				//full mutation
-				// Choose vertex to move segment to
 				targetSegmentVertex = connectorToMutate.getTargetSegment()
 						.getRandomVertex();
-				// Set new target vertex in connector
 				connectorToMutate.setTargetSegmentVertex(targetSegmentVertex);
 			} else {
-				//just rotation
 				targetSegmentVertex = connectorToMutate.getTargetSegmentVertex();
 			}
 			
-
-			// Do proper mutation
 			segmentToMove.moveToVertexByVertex(targetSegmentVertex,
 					segmentVertex);
 			--mutationStrenght;
 		}
-		
-
-		// Some optimization, that entity has changed
 		this.coveredArea = -1;
 	}
 
@@ -254,7 +187,6 @@ public class Entity implements Comparable<Entity> {
 	 * @return Number in range -1 : 1, represents percentage of covering
 	 */
 	public double getAdaptationSize() {
-		// If already computed
 		if (this.coveredArea < 0)
 			calculateAdaptation();
 
@@ -270,11 +202,9 @@ public class Entity implements Comparable<Entity> {
 
 		for (Connector connector : this.connectors)
 			mp.addSegment(connector.getSegment().clone());
-
-		// Check proper intersection
+		
 		double[] result = target.calculateIntersectionArea(mp);
 
-		// Save information
 		this.coveredArea = result[0] - result[1];
 		this.overlapArea = result[1];
 		this.targetArea = result[2];
@@ -372,7 +302,7 @@ public class Entity implements Comparable<Entity> {
 	 * 
 	 * @param other
 	 *            the other entity that we want to compare to
-	 * @return value represents the difference beetween entities
+	 * @return value represents the difference between entities
 	 */
 	public int compareTo(Entity other) {
 		return (this.getAdaptationSize() < other.getAdaptationSize() ? -1

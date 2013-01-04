@@ -28,8 +28,11 @@ import com.vividsolutions.jts.geom.Coordinate;
 @SuppressWarnings("serial")
 public class Statistics extends JFrame {
 
-	/** Vector of adaptations */
-	private final Vector<Double> adaptations;
+	/** Vector of  best adaptations */
+	private final Vector<Double> bestAdaptations;
+	
+	/** Vector of worst adaptations */
+	private final Vector<Double> worstAdaptations;
 
 	/** Population that is represented by the statistics */
 	private final Population p;
@@ -48,19 +51,30 @@ public class Statistics extends JFrame {
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		adaptations = new Vector<Double>();
+		bestAdaptations = new Vector<Double>();
+		worstAdaptations = new Vector<Double>();
 		this.p = p;
 		this.time = (double) System.currentTimeMillis();
 	}
 
 	/**
-	 * Adds new adaptations to vector of adaptations
+	 * Adds new adaptation to vector of best adaptations
 	 * 
 	 * @param a
-	 *            adaptation (from 0 do 1)
+	 *            adaptation (from 0 to 1)
 	 */
-	public void addAdaptation(double a) {
-		adaptations.add(a);
+	public void addBestAdaptation(double a) {
+		bestAdaptations.add(a);
+	}
+
+	/**
+	 * Adds new adaptation to vector of worst adaptations
+	 * 
+	 * @param a
+	 *            adaptation (from 0 to 1)
+	 */
+	public void addWorstAdaptation(double a) {
+		worstAdaptations.add(a);
 	}
 
 	/**
@@ -73,11 +87,11 @@ public class Statistics extends JFrame {
 		this.setTitle("Sequence reached in " + p.getGenerationNumber()
 				+ " generation ");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int scale = (int) dim.getWidth() / this.adaptations.size();
+		int scale = (int) dim.getWidth() / this.bestAdaptations.size();
 		Vector<Coordinate> coordinates = new Vector<Coordinate>();
-		for (int i = 0; i < this.adaptations.size(); ++i) {
+		for (int i = 0; i < this.bestAdaptations.size(); ++i) {
 			coordinates.add(new Coordinate(scale * i, (dim.getHeight() / 2)
-					* this.adaptations.get(i)));
+					* this.bestAdaptations.get(i)));
 		}
 		this.time = (double) System.currentTimeMillis() - this.time;
 		this.time = (double) this.time / 1000;
@@ -176,30 +190,21 @@ public class Statistics extends JFrame {
 
 			JLabel timeLabel = new JLabel("Time of calculations: " + time
 					+ " seconds");
-			timeLabel.setPreferredSize(new Dimension((int) dim.getWidth(),
+			timeLabel.setPreferredSize(new Dimension(300,
 					(int) dim.getHeight() / 20));
 			this.add(timeLabel);
 
 			JLabel generationsLabel = new JLabel("Number of generations: "
 					+ p.getGenerationNumber() + " generations");
-			generationsLabel.setPreferredSize(new Dimension((int) dim
-					.getWidth(), (int) dim.getHeight() / 20));
+			generationsLabel.setPreferredSize(new Dimension(300, (int) dim.getHeight() / 20));
 			this.add(generationsLabel);
-
-			JLabel informationLabel = new JLabel(
-					"Lower dashed line is 50% adaptation, upper is expected adaptation");
-			informationLabel.setPreferredSize(new Dimension((int) dim
-					.getWidth(), (int) dim.getHeight() / 20));
-			this.add(informationLabel);
 
 			this.setPreferredSize(new Dimension((int) dim.getWidth(), (int) dim
 					.getHeight() / 5));
 
 		}
 
-		public void paintComponent(Graphics g) {
-
-		}
+		public void paintComponent(Graphics g) {}
 	}
 
 	/**
@@ -213,7 +218,7 @@ public class Statistics extends JFrame {
 		public DownInformation(Statistics s) {
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 			this.add(new JLabel("Sequence of adaptations is "));
-			for (Double d : s.adaptations) {
+			for (Double d : s.bestAdaptations) {
 				DecimalFormat myFormatter = new DecimalFormat("#.###");
 				String output = myFormatter.format(d);
 				this.add(new JLabel(output));
@@ -223,7 +228,6 @@ public class Statistics extends JFrame {
 		}
 
 		public void paintComponent(Graphics g) {
-			// Nothing to do here
 		}
 	}
 }

@@ -44,17 +44,19 @@ public class Main {
 		
 		Vector<Painter> painters = new Vector<Painter>();
 		Statistics statistics = new Statistics(p);
-		
+		double[] worst = new double[1];
 		int generationNumber = 0;
 		while(true)
 		{
 			generationNumber++;			
-			Entity adapt = p.nextGeneration();
+			Entity adapt = p.nextGeneration(worst);
 			painters.add(new Painter(adapt, p));
 			if(painters.size() >= 2) painters.get(painters.size() -2).dispose();
 			System.out.println("Generation " + p.getGenerationNumber());
 			System.out.println(adapt);
-			statistics.addAdaptation(adapt.getAdaptationSize());
+			statistics.addBestAdaptation(adapt.getAdaptationSize());
+			statistics.addWorstAdaptation(worst[0]);
+			
 
 			if (adapt.getAdaptationSize() > condition)
 			{
