@@ -4,8 +4,10 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
@@ -17,6 +19,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.vividsolutions.jts.geom.Coordinate;
+
+import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.areas.AreaRenderer;
+import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
+import de.erichseifert.gral.plots.lines.LineRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 
 /*
  * Class that is used to show statistics after multiple generations
@@ -80,7 +93,7 @@ public class Statistics extends JFrame{
 		this.time = (double)this.time/1000;
 		
 		paintGraph(coordinates, this.time);
-		this.setBounds(0,0,(int)dim.getWidth(),(int)dim.getHeight());
+		this.setBounds(0,0,(int)dim.getWidth() - 100,(int)dim.getHeight() - 100);
 		this.setVisible(true);
 		
 	}
@@ -92,7 +105,38 @@ public class Statistics extends JFrame{
 	 */
 	public void paintGraph(final Vector<Coordinate> adapt, double time)
 	{
-		this.add(new MyPanel(adapt), BorderLayout.CENTER);	
+		@SuppressWarnings("unchecked")
+		DataTable data = new DataTable(Integer.class, Double.class);
+		for(int i = 0; i < adaptations.size(); ++i) {
+			data.add(i, adaptations.get(i)*100);
+		}
+		
+		Color color = new Color(0.0f, 0.3f, 1.0f);
+		
+		XYPlot plot = new XYPlot(data);
+		
+		LineRenderer lines = new DefaultLineRenderer2D();
+		plot.setLineRenderer(data, lines);
+		
+		AreaRenderer area = new DefaultAreaRenderer2D(); 
+		area.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(color, 64));
+		plot.setAreaRenderer(data, area);
+		
+        plot.getPointRenderer(data).setSetting(PointRenderer.COLOR, color);
+        plot.getLineRenderer(data).setSetting(LineRenderer.COLOR, color);
+        
+		plot.setSetting(XYPlot.TITLE, " Population statistics");
+		plot.setSetting(XYPlot.TITLE_FONT, new Font(Font.SANS_SERIF, Font.BOLD, 24));
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSettingDefault(AxisRenderer.LABEL, "Generation");
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSettingDefault(AxisRenderer.LABEL, "Adaptation [ % ]");
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICK_LABELS, true);
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS, true);
+		
+		plot.getAxis(XYPlot.AXIS_Y).setRange(0, 100);
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS, true);
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICK_LABELS, true);
+		
+		this.add(new InteractivePanel(plot), BorderLayout.CENTER);	
 		this.add(new UpInformation(time,p), BorderLayout.NORTH);
 		this.add(new DownInformation(this), BorderLayout.SOUTH);
 	}
@@ -158,21 +202,28 @@ public class Statistics extends JFrame{
 		
 		public UpInformation(double time, Population p)
 		{
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			GridLayout l =new GridLayout(2, 2);
+			this.setLayout(l);
 			
-			JLabel timeLabel = new JLabel("Time of calculations: "+ time + " seconds");
-			timeLabel.setPreferredSize(new Dimension((int)dim.getWidth(),(int)dim.getHeight()/20));
+			Font f = new Font(Font.SANS_SERIF, Font.BOLD, 16);
+			
+			JLabel timeLabel = new JLabel("Time of calculations: ", JLabel.CENTER);
+			timeLabel.setFont(f);
 			this.add(timeLabel);
 			
-			JLabel generationsLabel = new JLabel("Number of generations: " + p.getGenerationNumber() + " generations");
-			generationsLabel.setPreferredSize(new Dimension((int)dim.getWidth(),(int)dim.getHeight()/20));
+			JLabel generationsLabel = new JLabel("Number of generations: \n\t\t", JLabel.CENTER);
+			generationsLabel.setFont(f);
 			this.add(generationsLabel);
 			
-			JLabel informationLabel = new JLabel("Lower dashed line is 50% adaptation, upper is 100% adaptation");
-			informationLabel.setPreferredSize(new Dimension((int)dim.getWidth(),(int)dim.getHeight()/20));
-			this.add(informationLabel);
+			JLabel timeValue = new JLabel(time + " seconds", JLabel.CENTER);
+			timeValue.setFont(f);
+			this.add(timeValue);
 			
-			this.setPreferredSize(new Dimension((int)dim.getWidth(), (int)dim.getHeight()/5));
+			JLabel generationValue = new JLabel(p.getGenerationNumber() + " generations", JLabel.CENTER);
+			generationValue.setFont(f);
+			this.add(generationValue);
+			
+//			this.setPreferredSize(new Dimension(300, 200));
 			
 		}
 		public void paintComponent(Graphics g)

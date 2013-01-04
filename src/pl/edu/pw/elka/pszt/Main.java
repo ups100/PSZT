@@ -56,7 +56,8 @@ public class Main {
 			System.out.println(adapt);
 			statistics.addAdaptation(adapt.getAdaptationSize());
 
-			if (adapt.getAdaptationSize() > condition)
+			//if (adapt.getAdaptationSize() > condition)
+			if(generationNumber > 2)
 			{
 				System.out.println("Adaptation reached in " + p.getGenerationNumber() + "th" +  " generation");
 				painters.add(new Painter(adapt, p));
