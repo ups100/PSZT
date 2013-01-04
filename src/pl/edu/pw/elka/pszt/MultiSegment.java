@@ -94,6 +94,22 @@ public class MultiSegment {
 	{
 		return this.vertices.get(new Random().nextInt(this.vertices.size()));
 	}
+	
+	/**
+	 * Get vertex instance by given id from vertices list
+	 * 
+	 * @param id Vertex id
+	 * @return Vertex instance if found equal id
+	 * @throws Exception if no id found
+	 */
+	public Vertex getVertexById(final int id)
+	{
+		for (Vertex v : this.vertices)
+			if (id == v.getId())
+				return v;
+
+		return null;
+	}
 
 	/**
 	 * Align vertices to top left corner by removing minimum of X and Y coordinate

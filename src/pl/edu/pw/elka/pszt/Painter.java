@@ -30,7 +30,7 @@ public class Painter extends JFrame {
 		super(s);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setBounds(0,0,(int)dim.getWidth(),(int)dim.getHeight());
+		this.setBounds(0,0, 500 ,500);
 		this.setVisible(true);
 		ArrayList<Segment> segments = entity.getSegments();
 		ArrayList<Segment> multiSegments = multiEntity.getSegments();
@@ -145,10 +145,10 @@ public class Painter extends JFrame {
 						ArrayList<Vertex> multiVertices = segment.getVertices();
 						for (int i = 0; i < multiVertices.size(); ++i)
 						{
-							g2.drawLine(250 + correctionX + (int)scaleX *(int) multiVertices.get(i).getX(),
-										250 + correctionY + (int)scaleY *(int) multiVertices.get(i).getY(),
-										250 + correctionX + (int)scaleX *(int) multiVertices.get((i + 1) % multiVertices.size()).getX(),
-										250 + correctionY + (int)scaleY *(int) multiVertices.get((i + 1) % multiVertices.size()).getY());
+							g2.drawLine(50 + correctionX + (int)scaleX *(int) multiVertices.get(i).getX(),
+										50 + correctionY + (int)scaleY *(int) multiVertices.get(i).getY(),
+										50 + correctionX + (int)scaleX *(int) multiVertices.get((i + 1) % multiVertices.size()).getX(),
+										50 + correctionY + (int)scaleY *(int) multiVertices.get((i + 1) % multiVertices.size()).getY());
 						}				
 					}	
 				}
@@ -165,10 +165,10 @@ public class Painter extends JFrame {
 					ArrayList<Vertex> vertices = segment.getVertices();
 					for (int i = 0; i < vertices.size(); ++i)
 					{
-						g2.drawLine(250 + correctionX + (int)scaleX *(int) vertices.get(i).getX(),
-									250 + correctionY + (int)scaleY *(int) vertices.get(i).getY(),
-									250 + correctionX + (int)scaleX *(int) vertices.get((i + 1) % vertices.size()).getX(),
-									250 + correctionY + (int)scaleY *(int) vertices.get((i + 1) % vertices.size()).getY());
+						g2.drawLine(50 + correctionX + (int)scaleX *(int) vertices.get(i).getX(),
+									50 + correctionY + (int)scaleY *(int) vertices.get(i).getY(),
+									50 + correctionX + (int)scaleX *(int) vertices.get((i + 1) % vertices.size()).getX(),
+									50 + correctionY + (int)scaleY *(int) vertices.get((i + 1) % vertices.size()).getY());
 					}
 				}
 			}

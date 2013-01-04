@@ -59,11 +59,12 @@ public class Main {
 			if (adapt.getAdaptationSize() > condition)
 			{
 				System.out.println("Adaptation reached in " + p.getGenerationNumber() + "th" +  " generation");
+				painters.add(new Painter(adapt, p));
 				statistics.showResults(p);
 				break;
 			}
 			
-			if (generationNumber > 10)
+			if (generationNumber > 100)
 			{
 				generationNumber = 0;
 				condition -= 0.01;
