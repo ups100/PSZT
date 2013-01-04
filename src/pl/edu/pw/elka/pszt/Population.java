@@ -15,7 +15,7 @@ import java.util.Vector;
 public class Population {
 
 	/** Amount of first population at least 2! */
-	public static final int FIRST_AMOUNT = 100;
+	public static final int FIRST_AMOUNT = 200;
 
 	/** List of entities */
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -141,6 +141,10 @@ public class Population {
 				afterCopulationList.add(evolvingEntities.get(i).copulateWith(evolvingEntities.get(j), this.generationNumber));
 			}
 		}
+		/*for(int i = 0; i<evolvingEntities.size()-1; ++i)
+		{
+			afterCopulationList.add(evolvingEntities.get(i).copulateWith(evolvingEntities.get(i+1), this.generationNumber));
+		}*/
 		return afterCopulationList;
 
 	}
@@ -155,7 +159,7 @@ public class Population {
 	{
 		Random generator = new Random();	
 		int theChosenOnes = 0;
-		while((theChosenOnes<FIRST_AMOUNT/10) || (theChosenOnes>(FIRST_AMOUNT/2)))
+		while((theChosenOnes<FIRST_AMOUNT/10) || (theChosenOnes>(FIRST_AMOUNT/3)))
 			theChosenOnes = generator.nextInt(this.entities.size()-1) + 1;
 		Vector<Integer> previousNumbers = new Vector<>();
 		ArrayList<Entity> list = new ArrayList<Entity>();

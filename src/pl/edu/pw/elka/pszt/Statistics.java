@@ -68,7 +68,7 @@ public class Statistics extends JFrame{
 	 */
 	public void showResults(Population p) 
 	{
-		this.setTitle("Sequence reached in " + p.getGenerationNumber()+" generation ");
+		this.setTitle("Sequence reached in " + p.getGenerationNumber() +" generation ");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int scale = (int)dim.getWidth()/this.adaptations.size();
 		Vector<Coordinate> coordinates = new Vector<Coordinate>();
