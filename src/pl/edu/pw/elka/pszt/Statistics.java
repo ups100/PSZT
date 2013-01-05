@@ -1,25 +1,16 @@
 package pl.edu.pw.elka.pszt;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Shape;
-import java.awt.Toolkit;
-import java.awt.geom.Ellipse2D;
 import java.text.DecimalFormat;
 import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import com.vividsolutions.jts.geom.Coordinate;
 
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
@@ -125,16 +116,14 @@ public class Statistics extends JFrame {
 		@SuppressWarnings("unchecked")
 		DataTable dataTable = new DataTable(Integer.class, Double.class);
 		for(int i = 0; i < bestAdaptations.size(); ++i) {
-			dataTable.add( i + 1, bestAdaptations.get(i)*100);
+			dataTable.add( i + 1, bestAdaptations.get(i));
 		}
 		
 		@SuppressWarnings("unchecked")
 		DataTable dataTable2 = new DataTable(Integer.class, Double.class);
 		for(int i = 0; i < worstAdaptations.size(); ++i) {
-			dataTable2.add(i + 1, worstAdaptations.get(i)*100);
+			dataTable2.add(i + 1, worstAdaptations.get(i));
 		}
-		
-		System.out.println("worst   " + worstAdaptations.get(0));
 		
 		DataSource data = new DataSeries("Best entity", dataTable);
 		DataSource data2 = new DataSeries("Worst entity", dataTable2);
@@ -168,14 +157,14 @@ public class Statistics extends JFrame {
 		plot.getAxisRenderer(XYPlot.AXIS_X).setSettingDefault(AxisRenderer.LABEL, "Generation");
 		
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setSettingDefault(AxisRenderer.LABEL, "Adaptation [ % ]");
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICK_LABELS_FORMAT, new DecimalFormat(" %"));
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICK_LABELS_FORMAT, new DecimalFormat("0 %"));
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.INTERSECTION, 1);
 		
 		plot.getAxis(XYPlot.AXIS_X).setRange(0, bestAdaptations.size() + 1);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICK_LABELS, true);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS, true);
 		
-		plot.getAxis(XYPlot.AXIS_Y).setRange(-15, 115);
+		plot.getAxis(XYPlot.AXIS_Y).setRange(-0.15, 1.15);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS, true);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICK_LABELS, true);
 		

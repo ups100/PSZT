@@ -35,7 +35,7 @@ public class Main {
 		}
 		else
 		{
-			multiSegment = reader.read("generation5");
+			multiSegment = reader.read("generation1");
 			condition = 0.99;
 		}
 			
@@ -51,11 +51,16 @@ public class Main {
 		int generationNumber = 0;
 		while(true)
 		{
-			generationNumber++;			
+			generationNumber++;
+			long startTime2 = System.currentTimeMillis();
 			Entity adapt = p.nextGeneration(worst);
+			
+			System.out.println("Generation " + p.getGenerationNumber());
+			System.out.println("Generation created in " + (System.currentTimeMillis() - startTime2) + " ms");
+			
 			painters.add(new Painter(adapt, p));
 			if(painters.size() >= 2) painters.get(painters.size() -2).dispose();
-			System.out.println("Generation " + p.getGenerationNumber());
+			
 			System.out.println("Best entity adaptation = " + ((int)(adapt.getAdaptationSize()*10000))*0.01 + " %");
 			System.out.println("Worst entity adaptation = " + ((int)(worst[0]*10000))*0.01 + " %");
 			statistics.addBestAdaptation(adapt.getAdaptationSize());

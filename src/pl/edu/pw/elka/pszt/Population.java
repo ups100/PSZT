@@ -48,8 +48,13 @@ public class Population {
 	public Population(final MultiSegment targetSegment) {
 		this.targetSegment = targetSegment;
 		lastBest = -1;
+		int j = 10, i =0;
 		while (entities.size() < FIRST_AMOUNT) {
 			this.entities.add(createRandomEntity());
+			if(((double)(++i*100) /FIRST_AMOUNT) > j) {
+				System.out.println("First population generation completed in " + j + " %");
+				j += 10;
+			}
 		}
 	}
 
@@ -81,7 +86,6 @@ public class Population {
 		mutator++;
 		mutator3++;
 		mutator4++;
-		long startTime2 = System.currentTimeMillis();
 		
 		if(mutator4 > 7)
 		{
@@ -154,7 +158,7 @@ public class Population {
 			mutator4 = 0;
 		}
 
-		System.out.println("Generation created in " + (System.currentTimeMillis() - startTime2) + " ms");
+		
 		worst[0] = getWorstAdaptedEntity().getAdaptationSize();
 		return getMostAdaptedEntity();
 	}
