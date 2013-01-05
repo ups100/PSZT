@@ -7,7 +7,6 @@
 	<classpathentry kind="lib" path="jts_lib/jts-1.8.jar"/>
 	<classpathentry kind="lib" path="jts_lib/jtsio-1.8.jar"/>
 	<classpathentry kind="lib" path="jts_lib/junit.jar"/>
-	<classpathentry kind="lib" path="jts_lib/xerces.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jts_lib/gral.jar"/>
 	<classpathentry kind="output" path="bin1"/>
