@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -20,7 +21,10 @@ import javax.swing.JPanel;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import de.erichseifert.gral.data.DataSeries;
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
@@ -39,222 +43,182 @@ import de.erichseifert.gral.util.GraphicsUtils;
  */
 
 @SuppressWarnings("serial")
-public class Statistics extends JFrame{
+public class Statistics extends JFrame {
 
-	/** Vector of adaptations */
-	private final Vector<Double> adaptations;
+	/** Vector of  best adaptations */
+	private final Vector<Double> bestAdaptations;
 	
+	/** Vector of worst adaptations */
+	private final Vector<Double> worstAdaptations;
+
 	/** Population that is represented by the statistics */
 	private final Population p;
-	
+
 	/** For some measurements */
 	double time;
-	
+
 	/**
-	 * c-tor
-	 * Starts counting, how much time has passed
-	 * @param p First population
+	 * c-tor Starts counting, how much time has passed
+	 * 
+	 * @param p
+	 *            First population
 	 */
-	public Statistics(Population p)
-	{
+	public Statistics(Population p) {
 		super("Statistics");
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		adaptations = new Vector<Double>();
+		bestAdaptations = new Vector<Double>();
+		worstAdaptations = new Vector<Double>();
 		this.p = p;
-		this.time = (double)System.currentTimeMillis();
+		this.time = (double) System.currentTimeMillis();
 	}
-	
+
 	/**
-	 * Adds new adaptations to vector of adaptations
-	 * @param a adaptation (from 0 do 1)
+	 * Adds new adaptation to vector of best adaptations
+	 * 
+	 * @param a
+	 *            adaptation (from 0 to 1)
 	 */
-	public void addAdaptation(double a)
-	{
-		adaptations.add(a);
+	public void addBestAdaptation(double a) {
+		bestAdaptations.add(a);
 	}
-	
+
+	/**
+	 * Adds new adaptation to vector of worst adaptations
+	 * 
+	 * @param a
+	 *            adaptation (from 0 to 1)
+	 */
+	public void addWorstAdaptation(double a) {
+		worstAdaptations.add(a);
+	}
+
 	/**
 	 * Used to show Frame with results, such as time, number of generations etc
-	 * @param p Last Generation
+	 * 
+	 * @param p
+	 *            Last Generation
 	 */
-	public void showResults(Population p) 
-	{
-		this.setTitle("Sequence reached in " + p.getGenerationNumber()+" generation ");
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int scale = (int)dim.getWidth()/this.adaptations.size();
-		Vector<Coordinate> coordinates = new Vector<Coordinate>();
-		for(int i = 0; i<this.adaptations.size(); ++i)
-		{
-			coordinates.add(new Coordinate(scale*i,(dim.getHeight()/2)*this.adaptations.get(i)));
-		}
-		this.time = (double)System.currentTimeMillis() - this.time;
-		this.time = (double)this.time/1000;
+	public void showResults(Population p) {
+		this.setTitle("Sequence reached in " + p.getGenerationNumber()
+				+ " generation ");
 		
-		paintGraph(coordinates, this.time);
-		this.setBounds(0,0,(int)dim.getWidth() - 100,(int)dim.getHeight() - 100);
+		this.time = (double) System.currentTimeMillis() - this.time;
+		this.time = (double) this.time / 1000;
+
+		paintGraph( this.time);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setVisible(true);
-		
+
 	}
-	
+
 	/**
 	 * Adds three panels with informations
-	 * @param adapt vector of coordinates used to paint
-	 * @param time how much time did it take to solve tangram
+	 * 
+	 * @param adapt
+	 *            vector of coordinates used to paint
+	 * @param time
+	 *            how much time did it take to solve tangram
 	 */
-	public void paintGraph(final Vector<Coordinate> adapt, double time)
-	{
+	public void paintGraph(double time) {
 		@SuppressWarnings("unchecked")
-		DataTable data = new DataTable(Integer.class, Double.class);
-		for(int i = 0; i < adaptations.size(); ++i) {
-			data.add(i, adaptations.get(i)*100);
+		DataTable dataTable = new DataTable(Integer.class, Double.class);
+		for(int i = 0; i < bestAdaptations.size(); ++i) {
+			dataTable.add( i + 1, bestAdaptations.get(i)*100);
 		}
 		
-		Color color = new Color(0.0f, 0.3f, 1.0f);
+		@SuppressWarnings("unchecked")
+		DataTable dataTable2 = new DataTable(Integer.class, Double.class);
+		for(int i = 0; i < worstAdaptations.size(); ++i) {
+			dataTable2.add(i + 1, worstAdaptations.get(i)*100);
+		}
 		
-		XYPlot plot = new XYPlot(data);
+		System.out.println("worst   " + worstAdaptations.get(0));
+		
+		DataSource data = new DataSeries("Best entity", dataTable);
+		DataSource data2 = new DataSeries("Worst entity", dataTable2);
+		
+		Color color = new Color(0.0f, 0.3f, 1.0f);
+		Color color2 = new Color(1.0f, 0.3f, 0.0f);
+		
+		XYPlot plot = new XYPlot(data, data2);
 		
 		LineRenderer lines = new DefaultLineRenderer2D();
+		lines.setSetting(LineRenderer.COLOR, color);
 		plot.setLineRenderer(data, lines);
+		
+		LineRenderer lines2 = new DefaultLineRenderer2D();
+		lines2.setSetting(LineRenderer.COLOR, color2);
+		plot.setLineRenderer(data2, lines2);
 		
 		AreaRenderer area = new DefaultAreaRenderer2D(); 
 		area.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(color, 64));
 		plot.setAreaRenderer(data, area);
 		
+		AreaRenderer area2 = new DefaultAreaRenderer2D(); 
+		area2.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(color2, 64));
+		plot.setAreaRenderer(data2, area2);
+		
         plot.getPointRenderer(data).setSetting(PointRenderer.COLOR, color);
-        plot.getLineRenderer(data).setSetting(LineRenderer.COLOR, color);
+        plot.getPointRenderer(data2).setSetting(PointRenderer.COLOR, color2);
         
 		plot.setSetting(XYPlot.TITLE, " Population statistics");
 		plot.setSetting(XYPlot.TITLE_FONT, new Font(Font.SANS_SERIF, Font.BOLD, 24));
 		plot.getAxisRenderer(XYPlot.AXIS_X).setSettingDefault(AxisRenderer.LABEL, "Generation");
-		plot.getAxisRenderer(XYPlot.AXIS_X).setSettingDefault(AxisRenderer.LABEL, "Adaptation [ % ]");
+		
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSettingDefault(AxisRenderer.LABEL, "Adaptation [ % ]");
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICK_LABELS_FORMAT, new DecimalFormat(" %"));
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.INTERSECTION, 1);
+		
+		plot.getAxis(XYPlot.AXIS_X).setRange(0, bestAdaptations.size() + 1);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICK_LABELS, true);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS, true);
 		
-		plot.getAxis(XYPlot.AXIS_Y).setRange(0, 100);
+		plot.getAxis(XYPlot.AXIS_Y).setRange(-15, 115);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS, true);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICK_LABELS, true);
 		
-		this.add(new InteractivePanel(plot), BorderLayout.CENTER);	
-		this.add(new UpInformation(time,p), BorderLayout.NORTH);
-		this.add(new DownInformation(this), BorderLayout.SOUTH);
+		plot.setSetting(Plot.LEGEND, true);
+		InteractivePanel panel = new InteractivePanel(plot);
+		
+		this.add(panel, BorderLayout.CENTER);	
+		this.add(new UpInformation(time, p), BorderLayout.NORTH);
 	}
-	
-	/**
-	 * Adds panel with graph
-	 * @author Marcin Kubik
-	 * @author Mikołaj Markiewicz
-	 * @author Krzysztof Opasiak
-	 */
-	private class MyPanel extends JPanel 
-	{
-		Vector<Coordinate> adapt;
-		
-		/**
-		 * Creates panel with graph
-		 * @param adapt vector of coordinates
-		 */
-		public MyPanel(final Vector<Coordinate> adapt)
-		{
-			this.setBackground(Color.WHITE);
-			this.adapt = adapt;
-			setVisible(true);
-		}
-		
-		public void paintComponent(Graphics g) 
-		{
-			this.setBackground(Color.WHITE);
-			Shape circle;
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			Graphics2D g2 = (Graphics2D) g;
-			for(int i = 0; i<adapt.size()-1; ++i)
-			{
-				g2.drawLine((int)adapt.get(i).x, (int)(dim.getHeight() - adapt.get(i).y - 200),
-							(int)adapt.get(i+1).x, (int)(dim.getHeight() - adapt.get(i+1).y - 200));
-				circle = new Ellipse2D.Float((int) adapt.get(i).x -3, (int)(dim.getHeight() - adapt.get(i).y - 200) -3, 6.0f,6.0f);
-				g2.draw(circle);
-			}
-			circle = new Ellipse2D.Float((int) adapt.get(adapt.size()-1).x - 3, 
-										(int)(dim.getHeight() - adapt.get(adapt.size()-1).y -200) -3, 6.0f,6.0f);
-			g2.draw(circle);
-			float dash[] = {10.0f};
-			BasicStroke dashed = new BasicStroke(1.0f,
-                    BasicStroke.CAP_BUTT,
-                    BasicStroke.JOIN_MITER, 10.0f,dash,0.0f);
 
-			g2.setStroke(dashed);
-			g2.drawLine(0, (int)(dim.getHeight() - adapt.get(adapt.size()-1).y -200), 
-							(int)dim.getWidth(), (int)(dim.getHeight() - adapt.get(adapt.size()-1).y - 200));
-		
-			g2.drawLine(0,(int)(dim.getHeight() - (dim.getHeight()/2) * 0.5 - 200), (int)dim.getWidth(), (int)(dim.getHeight() - (dim.getHeight()/2) * 0.5) - 200);
-		}
-	}
-	
 	/**
 	 * Adds panel with statistic informations
+	 * 
 	 * @author Marcin Kubik
 	 * @author Mikołaj Markiewicz
 	 * @author Krzysztof Opasiak
 	 */
-	private class UpInformation extends JPanel
-	{
-		
-		public UpInformation(double time, Population p)
-		{
-			GridLayout l =new GridLayout(2, 2);
+	private class UpInformation extends JPanel {
+
+		public UpInformation(double time, Population p) {
+			GridLayout l =new GridLayout(2, 2, 30, 30);
 			this.setLayout(l);
-			
+
 			Font f = new Font(Font.SANS_SERIF, Font.BOLD, 16);
 			
 			JLabel timeLabel = new JLabel("Time of calculations: ", JLabel.CENTER);
 			timeLabel.setFont(f);
 			this.add(timeLabel);
-			
+
 			JLabel generationsLabel = new JLabel("Number of generations: \n\t\t", JLabel.CENTER);
 			generationsLabel.setFont(f);
 			this.add(generationsLabel);
-			
+
 			JLabel timeValue = new JLabel(time + " seconds", JLabel.CENTER);
 			timeValue.setFont(f);
 			this.add(timeValue);
-			
 			JLabel generationValue = new JLabel(p.getGenerationNumber() + " generations", JLabel.CENTER);
 			generationValue.setFont(f);
 			this.add(generationValue);
 			
-//			this.setPreferredSize(new Dimension(300, 200));
-			
+
 		}
-		public void paintComponent(Graphics g)
-		{
-			
-		}
-	}
-	
-	/**
-	 * Adds panel with all adaptations
-	 * @author Marcin Kubik
-	 * @author Mikołaj Markiewicz
-	 * @author Krzysztof Opasiak
-	 */
-	private class DownInformation extends JPanel
-	{
-		public DownInformation(Statistics s)
-		{
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			this.add(new JLabel("Sequence of adaptations is "));
-			for(Double d : s.adaptations)
-			{		
-				DecimalFormat myFormatter = new DecimalFormat("#.###");
-				String output = myFormatter.format(d);
-				this.add(new JLabel(output));
-			}
-			this.setPreferredSize(new Dimension((int)dim.getWidth(), (int)dim.getHeight()/10));
-		}
-		public void paintComponent(Graphics g)
-		{
-			//Nothing to do here
-		}
+
+		public void paintComponent(Graphics g) {}
 	}
 }

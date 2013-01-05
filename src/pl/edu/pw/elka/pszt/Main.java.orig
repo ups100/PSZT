@@ -1,9 +1,6 @@
 package pl.edu.pw.elka.pszt;
 
-
-
 import java.util.Vector;
-
 
 /**
  * Main app class
@@ -16,66 +13,67 @@ public class Main {
 
 	/**
 	 * main function that tries to solve tangram
-	 * @param args name of file, that contains tangram to make            
+	 * 
+	 * @param args
+	 *            name of file, that contains tangram to make
 	 */
-	public static void main(String[] args)
-	{	
+	public static void main(String[] args) {
 		Reader reader = new Reader();
 		MultiSegment multiSegment;
 		double condition;
-		if (args.length == 1) 
-		{
+		if (args.length == 1) {
 			multiSegment = reader.read(args[0]);
 			condition = 0.99;
-		}
-		else if (args.length == 2)
-		{
+		} else if (args.length == 2) {
 			multiSegment = reader.read(args[0]);
 			condition = Double.parseDouble(args[1]);
-		}
-		else
-		{
-			multiSegment = reader.read("generation5");
+		} else {
+			multiSegment = reader.read("generation1");
 			condition = 0.99;
 		}
-			
-        new Painter(new Entity(multiSegment), new Entity(multiSegment), "Target Tangram");
-        
-        System.out.println("Generating first population");
-        Population p = new Population(multiSegment);
-        System.out.println("First population generated");
-		
+
+		new Painter(new Entity(multiSegment), new Entity(multiSegment),
+				"Target Tangram");
+		Population p = new Population(multiSegment);
+
 		Vector<Painter> painters = new Vector<Painter>();
 		Statistics statistics = new Statistics(p);
-		double[] worst = new double[1];
-		int generationNumber = 0;
-		while(true)
-		{
-			generationNumber++;			
-			Entity adapt = p.nextGeneration(worst);
-			painters.add(new Painter(adapt, p));
-			if(painters.size() >= 2) painters.get(painters.size() -2).dispose();
-			System.out.println("Generation " + p.getGenerationNumber());
-			System.out.println("Best entity adaptation = " + ((int)(adapt.getAdaptationSize()*10000))*0.01 + " %");
-			System.out.println("Worst entity adaptation = " + ((int)(worst[0]*10000))*0.01 + " %");
-			statistics.addBestAdaptation(adapt.getAdaptationSize());
-			statistics.addWorstAdaptation(worst[0]);
-			
 
+		int generationNumber = 0;
+		while (true) {
+			generationNumber++;
+			Entity adapt = p.nextGeneration();
+			painters.add(new Painter(adapt, p));
+			if (painters.size() >= 2)
+				painters.get(painters.size() - 2).dispose();
+			System.out.println("Generation " + p.getGenerationNumber());
+			System.out.println(adapt);
+			statistics.addAdaptation(adapt.getAdaptationSize());
+
+<<<<<<< HEAD
+			if (adapt.getAdaptationSize() > condition) {
+				System.out.println("Adaptation reached in "
+						+ p.getGenerationNumber() + "th" + " generation");
+=======
 			if (adapt.getAdaptationSize() > condition)
 			{
 				System.out.println("Adaptation reached in " + p.getGenerationNumber() + "th" +  " generation");
+>>>>>>> 874ea85e2b403cea552214873a9e14787f9b39ce
+				painters.add(new Painter(adapt, p));
 				statistics.showResults(p);
 				break;
 			}
+<<<<<<< HEAD
+
+			if (generationNumber > 100) {
+=======
 			
 			if (generationNumber > 100)
 			{
+>>>>>>> 874ea85e2b403cea552214873a9e14787f9b39ce
 				generationNumber = 0;
 				condition -= 0.01;
 			}
 		}
 	}
 }
-
-	

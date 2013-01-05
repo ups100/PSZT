@@ -94,7 +94,6 @@ public class Segment {
 		int i = 0;
 		for (; i < this.vertices.size(); ++i)
 			coordinates[i] = this.vertices.get(i).getCoordinate();
-
 		
 		coordinates[i] = this.vertices.get(0).getCoordinate();
 
@@ -211,7 +210,6 @@ public class Segment {
 	 */
 	public Vertex getRandomVertex()
 	{
-		// TODO maybe put 'except' those numbers or sth like that, depends of algorithm
 		return this.vertices.get(new Random().nextInt(this.vertices.size()));
 	}
 
