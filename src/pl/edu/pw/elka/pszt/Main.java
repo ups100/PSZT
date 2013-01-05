@@ -35,7 +35,7 @@ public class Main {
 		}
 		else
 		{
-			multiSegment = reader.read("generation5");
+			multiSegment = reader.read("generation1");
 			condition = 0.99;
 		}
 			
